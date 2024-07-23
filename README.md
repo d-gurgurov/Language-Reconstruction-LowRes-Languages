@@ -14,7 +14,7 @@ This project addresses the challenge of translating between low-resource languag
 
 ### Schematics
 
-<img src="assets/badlrl.png" alt="BadLRL Process" width="400"/>
+<img src="assets/badlrl.png" alt="BadLRL Process" width="600"/>
 
 ## Literature Review
 
@@ -65,6 +65,20 @@ This project addresses the challenge of translating between low-resource languag
 11. **[A Survey on Text Generation Using Generative Adversarial Networks](https://pdf.sciencedirectassets.com/272206/1-s2.0-S0031320321X00088/1-s2.0-S0031320321002855/main.pdf?X-Amz-Security-Token=IQoJb3JpZ2luX2VjELL%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJHMEUCIGlaW%2BPbggIaiV4tM8MXcRO7ItJl27SLSuhgSUmYR6ukAiEAxdj6GBtxbLmCib0hmTTeA85kZDalYXN5oKJdDlj%2BtoIqvAUIi%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAFGgwwNTkwMDM1NDY4NjUiDAM%2FN22EXi0vcBosIyqQBTD2g%2B96KZMotLRnAvsqJcRflPXFpMNRygRGkyF0vEstUd%2BfmBA%2FDb2bZj1TbVq0ejs%2F9CXzFpayC%2B8yGA1WV5zbrZB8HPQbRrAh9Crjrou24N7y%2F7pjsGJBssPAXzPnpKgYMpdTiyxqQOaTQIkpAzUm2Uf2UiSgEUP4BnRloDysRIO71TZet1yWhvse1f%2Fwn5N7oqQab9E2SxLZ6SWmfWP6iKjHlqlWfxyYO%2FkUuBF8QxaPpzQPI%2FezTu%2BVXejkgqWwtsU7gF3ks2%2Fym0E4jfgUJPXPIt1DuSxv48Wx53IAIcmNkzis0T7bhUyrxqsFfX%2FKJrqc%2BlAyCJDobzteSYcmtdibWa4QmIpssnUSNMivehuSf265259izrZAt%2BqlLQ4%2BprY9tWTdTZv4Hk4nLK95%2BTXnAJ01Y%2BiFRAmfhyItIqh978RNuNuWlqNXd0Zx0FnvVH%2Fv7QAxEjZPK2RbX6xf3AMSfGnDSDVPAotnubqhv969Vhz3mTxrI15P%2Fd%2FEht%2BNgG6q4Ny6DgBji0U%2Bwxk%2FD3AuEZiVGblat%2Fz9LgThsTf1w7Bb2q4tX7ZEFsJbEoeA%2F8vVvVImL9zxhj6tY%2FkwTIW%2FMuQQNA%2BdlsdOq3sCF9VWg9%2FRtD3gIpfQZ8qOt8FjAOhTCQmD0hV7nfpw8XcMMB9X8WdCPR9%2Fejcfi8eeZu%2FCfBhqvTrYaF30%2Fd9vx%2FDRhHjrEOdHyEwUZmH53InJIjWJx1q0eL3ym3DdOXmXiTmqMpf%2BAdwobAxm7wtu%2BbMXrhLIu8N9H%2BlKTUd2xh2Jzp3Z3ZrUCmQWi3Xqthn6tljZr2tNR6TybBWuJcqSh9LvhTEG%2BdeYFei%2Bg5b%2BdxC3MNs5f%2Fb8StN51r%2Fs5U%2F6B7rXAyXfAj5hvdiZ7nlHtVXbE4T49fsFLpBGG3LrLtf88gnbZ%2FOwLRaaRZn3ZB32bsZeyDQafggHBh1GvSt4KcJYhZw7DEG5EjfG41Wz%2Fqvv3tK8zCMARsptNCsC4X5V8q7o7Rh78mOl7YlfTZDvlO8t4PYTh7De4SV53YUN3hAnKwcLFEAhciw%2BBXTg6ZTzochONjKrXLJCUgckloAnSkCUZa0%2BRo6eyJ7swxlFtnNw0%2FdneEjDa9cO%2Fqz1KMu6%2BZblAgFoUK7Zym8hDXAXsVbUE5CBu5zm9%2Fg%3D%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210711T224417Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIAQ3PHCVTY7DDGYSKY%2F20210711%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=fc805ed6c94d4e3b500fc32ad8b8efb11a4b382cf6cc2b2c95edb5412f7fc417)**  
     De Rosa et al. (2019)  
     - **Key Contribution**: Reviews GAN-based methods for text generation, which could provide insights into generating high-quality synthetic data.
+
+## Side questions:
+1. (?) Could the "BadLRL to LRL" model  be trained jointly with the main translation model
+2. (?) Conditional Variational Auto-Encoders for creating good synthetic corpus 
+	- **Encoder**:
+		    - Compresses the input data into a latent space
+		    - This latent space is represented as a probability distribution (usually Gaussian)
+	- **Latent Space**:
+		    - A compact representation of the input
+		    - Captures important features of the data
+	- **Decoder**:
+		    - Takes a sample from the latent space and the condition
+		    - Generates output data based on these inputs
+3. (?) Diffusion-like models for language reconstruction
 
 ## Data Sources
 
