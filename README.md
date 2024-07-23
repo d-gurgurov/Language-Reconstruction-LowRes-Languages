@@ -7,14 +7,14 @@ This project addresses the challenge of translating between low-resource languag
 ### Approach
 
 1. **Initial Translation**: Use an English-to-LRL MT model to translate a portion of parallel data (PD<sub>firsthalf</sub>) to an intermediary "BadLRL" representation.
-2. **Model Training for Refinement**: Train an MT model to translate from "BadLRL" to LRL, aiming to refine the quality of translations from "BadLRL" to "good" LRL.
+2. **Model Training for Refinement (Reconstruction Model)**: Train an MT model to translate from "BadLRL" to LRL, aiming to refine the quality of translations from "BadLRL" to "good" LRL.
     - Generate synthetic "BadLRL" data by scrambling LRL sentences or translating them incorrectly from English.
-3. **Synthetic Data Generation**: Utilize the two previous systems to create synthetic parallel data (PD<sub>synthetic</sub>).
-4. **Final Model Training**: Train the final MT model using both the second half of the parallel data (PD<sub>secondhalf</sub>) and the synthetic data (PD<sub>synthetic</sub>).
+3. **Synthetic Data Generation**: Utilize the two previous systems to create re-fined synthetic parallel data (PD<sub>synthetic</sub>).
+4. **Final Model Training**: Train the final MT model using both the second half of the parallel data (PD<sub>secondhalf</sub>) and the re-fined synthetic data (PD<sub>synthetic</sub>).
 
 ### Schematics
 
-![BadLRL Process](assets/badlrl.png)
+<img src="assets/badlrl.png" alt="BadLRL Process" width="400"/>
 
 ## Literature Review
 
