@@ -1,8 +1,7 @@
 import pandas as pd
 from transformers import MarianMTModel, MarianTokenizer
-import torch
+import torch #type: ignore
 from tqdm import tqdm
-from sklearn.model_selection import train_test_split
 
 # gpu set-up
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -10,7 +9,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # pre-trained model and tokenizer (Maltese for now)
 model_name = 'Helsinki-NLP/opus-mt-en-mt'
 tokenizer = MarianTokenizer.from_pretrained(model_name)
-model = MarianMTModel.from_pretrained(model_name).to(device)
+model = MarianMTModel.from_pretrained(model_name).to(device) #type: ignore
 
 # for multiple gpus
 if torch.cuda.device_count() > 1:
