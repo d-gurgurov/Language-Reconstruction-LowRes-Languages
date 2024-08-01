@@ -31,7 +31,7 @@ This project addresses the challenge of translating between low-resource languag
 ### Schematics
 <div align="center">
     <img src="assets/badlrl.png" alt="BadLRL Process" width="500" style="display: block; margin: 0 auto;"/>
-<div align="center">
+</div>
 
 ## Literature Review
 
