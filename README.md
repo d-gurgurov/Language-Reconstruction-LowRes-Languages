@@ -29,8 +29,9 @@ This project addresses the challenge of translating between low-resource languag
 - (9) Compare models from steps 7 and 8 -
 
 ### Schematics
-
-<img src="assets/badlrl.png" alt="BadLRL Process" width="600" style="display: block; margin: 0 auto;"/>
+<div align="center">
+    <img src="assets/badlrl.png" alt="BadLRL Process" width="500" style="display: block; margin: 0 auto;"/>
+<div align="center">
 
 ## Literature Review
 
