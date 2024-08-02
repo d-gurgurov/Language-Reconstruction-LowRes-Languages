@@ -20,8 +20,10 @@ This project addresses the challenge of translating between low-resource languag
 - (2) Train a baseline model on this parallel corpus + 
 - (3) Translate the parallel corpus to get BadLRL + 
 - (4) Train a reconstruction model for BadLRL to GoodLRL +
+    - initialized from the Helsinki-NLP model
 	- 2e-5; 3 epochs +
 	- 5e-5; 10 epochs + (closer to convergence)
+    - 5e-5; 20 epochs --> train from scratch
 - (5) Find a monolingual corpus & translate it with Helsinki-NLP to get BadLRL +
 	- [TinyStories](https://huggingface.co/datasets/roneneldan/TinyStories?row=10)
 - (6) Reconstruct the BadLRL from tinystories with the reconstruction model + 
@@ -66,6 +68,20 @@ SacreBLEU scores on Tatoeba (2021/03) test set:
 - Re-traindc reconstruction model
 	- 5e-5; 10 epochs
 - **To be added**
+
+SacreBLEU scores on Tatoeba (2021/08) test set:
+
+| Language//Model | 1     | 2     | 3     | 4         | 5   |
+| --------------- | ----- | ----- | ----- | --------- | --- |
+| eng-mlt         | 44.95 | 34.90 | 32.86 | **29.84** | N/A |
+
+SacreBLEU scores on Tatoeba (2021/03) test set: 
+
+| Language//Model | 1     | 2     | 3     | 4         | 5   |
+| --------------- | ----- | ----- | ----- | --------- | --- |
+| eng-mlt         | 45.36 | 34.14 | 33.92 | **30.70** | N/A |
+
+
 
 ### Schematics
 <div align="center">
