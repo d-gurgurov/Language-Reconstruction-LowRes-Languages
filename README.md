@@ -12,7 +12,7 @@ This project addresses the challenge of translating between low-resource languag
 3. **Synthetic Data Generation**: Utilize the two previous systems to create re-fined synthetic parallel data (PD<sub>synthetic</sub>).
 4. **Final Model Training**: Train the final MT model using both the second half of the parallel data (PD<sub>secondhalf</sub>) and the re-fined synthetic data (PD<sub>synthetic</sub>).
 
-### Prelimenary experiments
+### Prelimenary experimental steps
 
 - (1) Find parallel corpus for English-Maltese & MT system + 
 	- [en-mt](https://live.european-language-grid.eu/catalogue/corpus/7072) from ParaCrawl
@@ -20,13 +20,52 @@ This project addresses the challenge of translating between low-resource languag
 - (2) Train a baseline model on this parallel corpus + 
 - (3) Translate the parallel corpus to get BadLRL + 
 - (4) Train a reconstruction model for BadLRL to GoodLRL +
-- (5) Find a monolingual corpus & translate it with Helsinki-NLP to get BadLRL -
-	- [tinystories](https://huggingface.co/datasets/roneneldan/TinyStories?row=10)
-- (6) Reconstruct the BadLRL from tinystories with the reconstruction model - 
-- (7) Train a model with 50% parallel corpus and 50% BadLRL from step 5 -
-	- safe-check
-- (8) Train a model with 50% parallel corpus and 50% reconstructed BadLRL from step 6 - 
-- (9) Compare models from steps 7 and 8 -
+	- 2e-5; 3 epochs +
+	- 5e-5; 10 epochs + (closer to convergence)
+- (5) Find a monolingual corpus & translate it with Helsinki-NLP to get BadLRL +
+	- [TinyStories](https://huggingface.co/datasets/roneneldan/TinyStories?row=10)
+- (6) Reconstruct the BadLRL from tinystories with the reconstruction model + 
+- (7) Train a model with 50% parallel corpus and 50% BadLRL from step 5 +
+	- safe-check + 
+- (8) Train a model with 50% parallel corpus and 50% reconstructed BadLRL from step 6 + 
+- (9) Compare models from steps 7 and 8 +
+
+#### Prelimenary experiments (1) with the first version of reconstruction model:
+- (1) Model from [Helsinki-NLP](https://huggingface.co/Helsinki-NLP/opus-mt-en-mt)
+    - trained on (TO BE ADDED)
+- (2) Baseline trained on the full parallel corpus
+    - ParaCrawl data
+    - from scratch with the MarianMT architecture
+    - 10 epochs with lr of 2e-5
+- (3) Safe-check trained on the 50% parallel corpus and 50% badlrl
+    - from scratch with the MarianMT architecture
+    - 10 epochs with lr of 2e-5
+- (4) *Model trained on the 50% parallel corpus and 50% badlrl2lrl*
+    - from scratch with the MarianMT architecture
+    - 10 epochs with lr of 2e-5
+- (5) Model trained on the 50% parallel corpus and 100% badlrl2lrl
+    - from scratch with the MarianMT architecture
+    - 10 epochs with lr of 2e-5
+- Reconstruction model trained with = 2e-5; 3 epochs
+
+SacreBLEU scores on Tatoeba (2021/08) test set:
+
+| Language//Model | 1     | 2     | 3     | 4     | 5     |
+| --------------- | ----- | ----- | ----- | ----- | ----- |
+| eng-mlt         | 44.95 | 34.90 | 32.86 | **24.67** | **25.08** |
+
+SacreBLEU scores on Tatoeba (2021/03) test set: 
+
+| Language//Model | 1     | 2     | 3     | 4     | 5     |
+| --------------- | ----- | ----- | ----- | ----- | ----- |
+| eng-mlt         | 45.36 | 34.14 | 33.92 | **24.45** | **24.61** |
+
+
+#### Preliminary experiments (2) with improved version of reconstruction model:
+- All the same
+- Re-traindc reconstruction model
+	- 5e-5; 10 epochs
+- **To be added**
 
 ### Schematics
 <div align="center">
@@ -130,6 +169,7 @@ This project addresses the challenge of translating between low-resource languag
 		    - Takes a sample from the latent space and the condition
 		    - Generates output data based on these inputs
 3. (?) Diffusion-like models for language reconstruction (Refer to _diffusion_lm_)
+4. (?) SacreBLEU mostly used for evaluation these days???
 
 
 ## Data Sources
