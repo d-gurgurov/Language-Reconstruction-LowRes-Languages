@@ -54,13 +54,13 @@ SacreBLEU scores on Tatoeba (2021/08) test set:
 
 | Language//Model | 1     | 2     | 3     | 4     | 5     |
 | --------------- | ----- | ----- | ----- | ----- | ----- |
-| eng-mlt         | 44.95 | 34.90 | 32.86 | **24.67** | **25.08** |
+| eng-mlt         | 44.95 | 34.90 | 32.86 |  |  |
 
 SacreBLEU scores on Tatoeba (2021/03) test set: 
 
 | Language//Model | 1     | 2     | 3     | 4     | 5     |
 | --------------- | ----- | ----- | ----- | ----- | ----- |
-| eng-mlt         | 45.36 | 34.14 | 33.92 | **24.45** | **24.61** |
+| eng-mlt         | 45.36 | 34.14 | 33.92 |  |  |
 
 
 #### Preliminary experiments (2) with improved version of reconstruction model:
@@ -73,19 +73,19 @@ SacreBLEU scores on Tatoeba (2021/08) test set:
 
 | Language//Model | 1     | 2     | 3     | 4         | 5   |
 | --------------- | ----- | ----- | ----- | --------- | --- |
-| eng-mlt         | 44.95 | 34.90 | 32.86 | **29.84** | N/A |
+| eng-mlt         | 44.95 | 34.90 | 32.86 |  | |
 
 SacreBLEU scores on Tatoeba (2021/03) test set: 
 
 | Language//Model | 1     | 2     | 3     | 4         | 5   |
 | --------------- | ----- | ----- | ----- | --------- | --- |
-| eng-mlt         | 45.36 | 34.14 | 33.92 | **30.70** | N/A |
+| eng-mlt         | 45.36 | 34.14 | 33.92 |  | |
 
 
 #### Preliminary experiments (3) with improved version of reconstruction model:
 - All the same
 - Re-trained reconstruction model
-	- 5e-5; 25 epochs
+	- 5e-5; 30 epochs
 - **To be added**
 
 
