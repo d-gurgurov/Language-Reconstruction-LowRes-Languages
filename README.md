@@ -65,7 +65,7 @@ SacreBLEU scores on Tatoeba (2021/03) test set:
 
 #### Preliminary experiments (2) with improved version of reconstruction model:
 - All the same
-- Re-traindc reconstruction model
+- Re-trained reconstruction model
 	- 5e-5; 10 epochs
 - **To be added**
 
@@ -81,6 +81,12 @@ SacreBLEU scores on Tatoeba (2021/03) test set:
 | --------------- | ----- | ----- | ----- | --------- | --- |
 | eng-mlt         | 45.36 | 34.14 | 33.92 | **30.70** | N/A |
 
+
+#### Preliminary experiments (3) with improved version of reconstruction model:
+- All the same
+- Re-trained reconstruction model
+	- 5e-5; 25 epochs
+- **To be added**
 
 
 ### Schematics
