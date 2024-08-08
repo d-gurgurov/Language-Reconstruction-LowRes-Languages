@@ -1,0 +1,204 @@
+eng	mlt	eng_sent	mlt_sent
+1	1	Are you crazy?	Int miġnun?
+2	2	Are you crazy?	Int miġnuna?
+3	3	Are you married?	Inti miżżewweġa?
+4	4	Are you married?	Int miżżewweġ?
+5	5	Beats me.	Boqq.
+6	6	Berlin is the capital of Germany.	Berlin hija l-belt kapitali Ġermaniża.
+7	7	Burj Khalifa is currently the tallest skyscraper in the world.	Bħalissa Burj Khalifa huwa wieħed mill-itwal skajskrejper fid-dinja.
+8	8	Bye!	Ċaw!
+9	9	Cats catch mice.	Il-qtates jaqbdu l-ġrieden.
+10	10	Check, please.	Il-kont, jekk jogħġbok.
+11	11	Children are consuming sugar in amounts well above the limit, which is fixed at 30 grams.	It-tfal qed jieħdu zokkor ħafna aktar mil-limitu, jiġifieri dak ta’ 30 gramma ta’ zokkor.
+12	12	Come here!	Ejja hawn!
+13	13	Come here.	Ejja hawn!
+14	14	Come here.	Ejja 'l hawn
+15	15	Come with me!	Ejja miegħi!
+16	16	Come with me.	Ejja miegħi.
+17	17	Did you go out?	Ħriġt?
+18	18	Did you go shopping?	Mort tixtri?
+19	19	Did you take it out of the oven too soon?	Ħriġtux mill-forn kmieni wisq?
+20	20	Don't let go of my hand.	Titlaqx idi.
+21	21	Do you speak English?	Titkellem bl-Ingliż?
+22	22	Do you speak French?	Titkellem bil-Franċiż?
+23	23	Do you speak Italian?	Titkellem bit-Taljan?
+24	24	Do you speak Spanish?	Titkellem bl-Ispanjol?
+25	25	Get on the bus one by one.	Itilgħu fuq tal-linja wieħed wieħed.
+26	26	Good afternoon.	Il-waranofsinhar it-tajjeb.
+27	27	Goodbye!	Ċaw!
+28	28	Goodbye!	Saħħa.
+29	29	Good evening.	Bonswa.
+30	30	Good evening.	Il-lejla t-tajba.
+31	31	Good morning!	Bonġu!
+32	32	Good morning!	Bonġu.
+33	33	Good morning.	Bonġu.
+34	34	Goodnight!	Il-lejl it-tajjeb!
+35	35	Half of the children’s sugar intake comes from drink, sweets, cereals and yoghurts.	Man-nofs zokkor li jieħdu t-tfal ġej mix-xorb, il-ħelu, iċ-ċereali u l-yoghurts.
+36	36	Happy Easter!	L-Għid it-Tajjeb!
+37	37	Happy New Year!	Is-sena t-tajba!
+38	38	Happy New Year!	Is-Sena t-Tajba!
+39	39	Have a nice day.	Il-ġurnata t-tajba.
+40	40	He appeared honest.	Deher onest.
+41	41	He doesn't have a gun.	Hu ma għandux xkubetta.
+42	42	He is shit out of luck.	Għandu fortuna taż-żobb!
+43	43	Help!	Ajjut!
+44	44	He opened the drawer, and took out a letter.	Fetaħ il-kexxun, u ħareġ ittra.
+45	45	He ordered all the documents to be presented.	Ordna li jinġiebu d-dokumenti kollha.
+46	46	He ordered him to go home.	Ikkmandah imur id-dar.
+47	47	He ordered him to go home.	Ordnalu jmur id-dar.
+48	48	He told me he was going to America.	Huwa qalli li kien sejjer l-Amerika.
+49	49	Hi.	Aw.
+50	50	His mother speaks Italian.	Ommu titkellem bit-Taljan.
+51	51	How are you?	Kif int?
+52	52	How are you?	Kif inti?
+53	53	How foolish I am!	Kemm jien injorant!
+54	54	I agree with you.	Naqbel miegħek.
+55	55	I am a vegetarian.	Jien veġetarjan.
+56	56	I am a vegetarian.	Jien veġetarjana.
+57	57	I am English.	Jien Ingliż.
+58	58	I am happy.	Jien kuntenti.
+59	59	I am married.	Jiena miżżewweġa.
+60	60	I am nineteen years old.	Għandi dsatax-il sena.
+61	61	I come from England.	Jiena mill-Ingilterra.
+62	62	I disagree with almost everything Tom just said.	Ma naqbel ma' kważi xejn milli għadu kif qal Tom.
+63	63	I do not understand.	Ma nifhimx.
+64	64	I don't agree with you.	Ma nistax naqbel miegħek.
+65	65	I don't drink alcohol.	Ma nixrobx alcohol.
+66	66	I don't get it.	Ma nifhimx.
+67	67	I don't know.	Ma nafx.
+68	68	I don't speak Spanish.	Ma nitkellimx bl-Ispanjol?
+69	69	I don't understand.	Ma nifhimx.
+70	70	I don't want to go to school.	Jien ma rridx immur l-iskola.
+71	71	If it were up to us, we'd say no.	Kieku kien għalina, konna ngħidu le.
+72	72	I go to school at eight in the morning.	Immur l-iskola fit-tmienja ta' filgħodu.
+73	73	I had known her for ten years when I married her.	Kont ili nafha għaxar snin meta żżewwiġtha.
+74	74	I have two cats.	Għandi żewġ qtates.
+75	75	I know.	Naf.
+76	76	I know that he is a famous musician.	Naf li huwa mużiċist famuż.
+77	77	I learned everything from her.	Tgħallimt kollox mingħandha.
+78	78	I learned everything from him.	Tgħallimt kollox mingħandu.
+79	79	I learned everything from you.	Tgħallimt kollox mingħandek.
+80	80	I love you.	Inħobbok.
+81	81	I love you very much.	Inħobbok ħafna.
+82	82	I'm different from other guys.	Jien differenti minn ġuvintur oħra.
+83	83	I'm different from other guys.	Jien differenti minn subien oħra.
+84	84	I'm fine, thank you.	Tajjeb, grazzi!
+85	85	I'm from England.	Jiena mill-Ingilterra.
+86	86	I'm from Malta.	Jien minn Malta.
+87	87	I'm going on a trip.	Jien immur fuq vjaġġ.
+88	88	I'm lost.	Intlift.
+89	89	I'm married.	Jiena miżżewweġa.
+90	90	I'm married.	Jien miżżewweġ.
+91	91	I'm not a doctor.	M'iniex tabib.
+92	92	I'm not a doctor.	M'iniex tabiba.
+93	93	I'm not from here.	M'iniex minn hawn.
+94	94	I'm not like the other girls.	M'iniex bħal tfajliet oħrajn.
+95	95	I'm reading my book.	Jien naqra l-ktieb tiegħi.
+96	96	I never liked biology.	Qatt ma għoġobni l-bioloġija.
+97	97	In the beginning God created the heavens and the earth.	Fil-bidu Alla ħalaq is-sema u l-art.
+98	98	In the beginning, God created the heavens and the earth.	Fil-bidu Alla ħalaq is-sema u l-art.
+99	99	Is the watch on the table?	Huwa l-arloġġ qiegħed fuq il-mejda?
+100	100	Is the watch on the table?	L-arloġġ qiegħed fuq il-mejda?
+101	101	I think I have almost enough money to buy the computer I want.	Naħseb għandi biżżejjed flus biex nixtri l-kompjuter li rrid.
+102	102	I think we've bought almost everything we need.	Naħseb xtrajna kull m'għandna bżonn.
+103	103	It is unconstitutional.	Huwa antikostituzzjonali.
+104	104	It's cold today.	Il-kesħa llum.
+105	105	It's hot today.	Is-sħana llum.
+106	106	It was not my fault.	Ma kienx tort tiegħi.
+107	107	I've got almost everything I need.	Kważi għandi kull ma neħtieġ.
+108	108	I've got almost everything I need.	Kważi għandi kull ma rrid.
+109	109	I've got almost everything I need.	Kważi għandi kull m'għandi bżonn.
+110	110	Leave me alone!	Ħallini!
+111	111	Madrid is the capital of Spain.	Madrid hija l-belt kapitali ta' Spanja.
+112	112	Mary is too stubborn to apologize.	Mary rasha iebsa wisq biex tiskuza ruħha.
+113	113	Merry Christmas!	Il-Milied it-tajjeb!
+114	114	Millie has a book.	Millie għandha ktieb.
+115	115	Millie is reading her book.	Millie taqra l-ktieb tagħha.
+116	116	My mother cleans the room.	Ommi tnaddaf il-kamra.
+117	117	No problem!	Mhux problema.
+118	118	No, thanks.	Le, grazzi.
+119	119	No, thank you.	Le, grazzi.
+120	120	Rabbits like to eat carrots.	Il-fniek jħobbu jieklu l-karrotti.
+121	121	Sami and Layla never kissed.	Sami i Lejla se nikad nisu poljubili
+122	122	See you later!	Narak iktar tard!
+123	123	See you tomorrow.	Narak għada.
+124	124	She is my girlfriend.	Hija il-ħabiba tiegħi.
+125	125	She likes oranges.	Jogħġbuha l-larinġiet.
+126	126	Sorry, I've got to go.	Skużani, se jkolli mmur.
+127	127	Sorry, I've got to go.	Skużani, se jkolli nħallik.
+128	128	Thank you very much!	Grazzi ħafna!
+129	129	That's all you think about.	Fuq dak biss taħseb int.
+130	130	The bill came to over $25.	Il-kont ġie iktar minn $25.
+131	131	The bill, please.	Il-kont, jekk jogħġbok.
+132	132	The book is new.	Il-ktieb huwa ġdid.
+133	133	The book is on the table.	Il-ktieb huwa fuq il-mejda.
+134	134	The bottle is empty.	Il-flixkun huwa vojt.
+135	135	The boy is thin.	It-tifel huwa rqiq.
+136	136	The bus is slow.	Ix-xarabank huwa bil-mod.
+137	137	The check, please.	Il-kont, jekk jogħġbok.
+138	138	The city is big.	Il-belt hija kbira.
+139	139	The city is small.	Il-belt hija żgħira.
+140	140	The exam is difficult.	L-eżami huwa diffiċli.
+141	141	The exam is easy.	L-eżami huwa faċli.
+142	142	The game is fun.	Il-logħba hija divertenti.
+143	143	The girl has a white horse.	It-tifla għandha żiemel abjad.
+144	144	The glass is clean.	It-tazza hija nadifa.
+145	145	The glass is dirty.	It-tazza hija maħmuġa.
+146	146	The headmaster asked me: "Is next week a holiday?"	Is-surmast saqsieni: "Il-gimgħa d-diehla se tkun vaganza?"
+147	147	The headmaster asked me: "When is he coming?"	Is-surmast saqsieni : "Meta se jiġi?"
+148	148	The headmaster asked me whether next week was a holiday.	Is-surmast saqsieni jekk il-gimgħa d-diehla hux se tkun vaganza.
+149	149	The headmaster said: "Next week is a holiday'"	Is-surmast qal: "Il-gimgħa d-dieħla se tkun vaganza"
+150	150	The hole is narrow.	It-toqba hija dejqa.
+151	151	The hole is wide.	It-toqba hija wiesgħa.
+152	152	The man is strong.	Ir-raġel huwa qawwi.
+153	153	The only kidney I have is functioning better than the two I had.	L-unika kilwa li għandi qed taħdem aħjar minn meta kelli tnejn.
+154	154	The password is long.	Il-kelma biex tidħol hija twila.
+155	155	The password is short.	Il-kelma biex tidħol hija qasira.
+156	156	There are islands in the sea.	Hemm gżejjer fil-baħar.
+157	157	There are students in the library.	Hemm studenti fil-bibljoteka.
+158	158	There are ten exercises in the book.	Fil-ktieb hemm għaxart eżerċizzji.
+159	159	The room is dark.	Il-kamra hija mudlama.
+160	160	The smell is disgusting.	Ir-riħa hija diżgustanti.
+161	161	The translation is accurate.	It-traduzzjoni hija preċiża.
+162	162	The watch is on the table, isn't it?	L-arloġġ qiegħed fuq il-mejda, hu?
+163	163	The watch is on the table.	L-arloġġ qiegħed fuq il-mejda.
+164	164	This job is dead easy.	Dan ix-xogħol vera faċli.
+165	165	Tom would often make mistakes purposely just so the teacher would notice him.	Tom ġieli kien jiżbalja attapposta waqt il-lezzjonijiet sabiex l-għalliema tagħti kasu.
+166	166	Turn left.	Dur fuq ix-xellug.
+167	167	Turn right.	Dur fuq il-lemin.
+168	168	Turtles don't have teeth.	Il-fkieren m'għandhomx snien.
+169	169	We don't have a daughter.	M'għandniex tifla.
+170	170	Welcome.	Merħba!
+171	171	Welcome to Wikipedia.	Merħba fil-Wikipedija.
+172	172	Welcome to Wikipedia, the free encyclopedia that anyone can edit.	Merħba fil-Wikipedija, l-enċiklopedija ħielsa li kulħadd jista' jimmodifika.
+173	173	We're surrounded.	Mdawwrin!
+174	174	We thank you very much!	Nirringrazzjawk ħafna!
+175	175	We thank you very much!	Nirringrazzjawkom ħafna!
+176	176	What can we drink?	X'nistgħu nixorbu?
+177	177	What do you want to do today?	Xi trid tagħmel illum?
+178	178	What do you want to do?	Xi trid tagħmel?
+179	179	What is it?	X'inhi din?
+180	180	What is that?	X'inhi din?
+181	181	What is this?	X'inhi din?
+182	182	What is your name?	X’jismek?
+183	183	What's that?	X'inhi din?
+184	184	What's the time?	X'ħin hu?
+185	185	What's this?	X'inhi din?
+186	186	What's your name?	X’jismek?
+187	187	What time is it?	X'ħin hu?
+188	188	Where are you from?	Minn fejn int?
+189	189	Where do you live?	Fejn toqgħod?
+190	190	Where is the bank?	Fejn hu l-bank?
+191	191	Where is the toilet?	Fejn hu t-tojlit?
+192	192	Where's the toilet?	Fejn hu t-tojlit?
+193	193	Which horse did you bet on?	Liema żiemel lgħabt?
+194	194	Whom did you vote for in the election?	Għal min ivvutajt fl-elezzjoni?
+195	195	Who survived?	Min baqa ħaj?
+196	196	Who survived?	Min baqa' ħaj?
+197	197	Why doesn't the list of languages include Maltese?	Għaliex il-lista ta' l-ilsna ma tinkludix il-Malti?
+198	198	Yes.	Iva.
+199	199	You could at least say "thank you".	Tista' almenu tgħid "grazzi".
+200	200	You must follow school rules.	Trid tissegwa r-regoli ta' l-iskola.
+201	201	Your cat is black.	Il-qattus tiegħek huwa iswed.
+202	202	You should stop smoking.	Imissek tieqaf tpejjep.
+203	203	You took it out of the oven too soon.	Ħriġtu mill-forn kmieni wisq.
