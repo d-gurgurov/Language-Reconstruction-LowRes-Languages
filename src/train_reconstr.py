@@ -1,12 +1,12 @@
 import pandas as pd
-from transformers import MarianMTModel, MarianTokenizer, Trainer, TrainingArguments, Seq2SeqTrainingArguments
+from transformers import MarianMTModel, MarianTokenizer, Trainer, TrainingArguments, Seq2SeqTrainingArguments, MarianConfig
 from datasets import Dataset
 import torch # type: ignore
 from sklearn.model_selection import train_test_split
 import numpy as np
 
 # training data
-train_data = pd.read_csv('/netscratch/dgurgurov/thesis/mt_lrls/results/badlrl_first_half.csv')
+train_data = pd.read_csv('/netscratch/dgurgurov/thesis/mt_lrls/data/badlrl_first_half.csv')
 train_data, val_data = train_test_split(train_data, test_size=0.1, random_state=42)
 
 # converting the data into HF datasets
@@ -15,12 +15,15 @@ val_dataset = Dataset.from_pandas(val_data)
 
 # tokenizer and model
 model_name = 'Helsinki-NLP/opus-mt-mt-en'
+config = MarianConfig.from_pretrained(model_name)
 tokenizer = MarianTokenizer.from_pretrained(model_name)
 model = MarianMTModel.from_pretrained(model_name)
 
 # tokenizing the data
 def tokenize_function(examples):
-    inputs = tokenizer(examples['en'], truncation=True, padding='max_length', max_length=256)
+    # TODO: fix the column choice
+    # UPDATE: fixed now. let's rerun the experiments
+    inputs = tokenizer(examples['bad_lrl'], truncation=True, padding='max_length', max_length=256)
     with tokenizer.as_target_tokenizer():
         targets = tokenizer(examples['mt'], truncation=True, padding='max_length', max_length=256)
     inputs['labels'] = targets['input_ids']
@@ -31,14 +34,14 @@ tokenized_val_dataset = val_dataset.map(tokenize_function, batched=True, num_pro
 
 # training arguments
 training_args = Seq2SeqTrainingArguments(
-    output_dir='./results',
+    output_dir='/netscratch/dgurgurov/thesis/mt_lrls/models/reconstruction_30',
     evaluation_strategy="steps",
-    eval_steps=500, # change to 10000
-    save_steps=500,
-    learning_rate=2e-5,
+    eval_steps=5000, # change to 10000
+    save_steps=5000,
+    learning_rate=5e-5,
     per_device_train_batch_size=128,
     per_device_eval_batch_size=128, 
-    num_train_epochs=3,
+    num_train_epochs=30,
     load_best_model_at_end=True,
     weight_decay=0.01,
     save_total_limit=2,
@@ -89,5 +92,5 @@ trainer = Trainer(
 trainer.train()
 
 # save
-trainer.save_model('/netscratch/dgurgurov/thesis/mt_lrls/results/')
-tokenizer.save_pretrained('/netscratch/dgurgurov/thesis/mt_lrls/results/')
+trainer.save_model('/netscratch/dgurgurov/thesis/mt_lrls/models/reconstruction_30')
+tokenizer.save_pretrained('/netscratch/dgurgurov/thesis/mt_lrls/models/reconstruction_30')
