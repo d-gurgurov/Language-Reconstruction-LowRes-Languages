@@ -48,45 +48,19 @@ This project addresses the challenge of translating between low-resource languag
 - (5) Model trained on the 50% parallel corpus and 100% badlrl2lrl
     - from scratch with the MarianMT architecture
     - 10 epochs with lr of 2e-5
-- Reconstruction model trained with = 2e-5; 3 epochs
+- Reconstruction model trained with = 2e-5; 30 epochs
 
 SacreBLEU scores on Tatoeba (2021/08) test set:
 
 | Language//Model | 1     | 2     | 3     | 4     | 5     |
 | --------------- | ----- | ----- | ----- | ----- | ----- |
-| eng-mlt         | 44.95 | 34.90 | 32.86 |  |  |
+| eng-mlt         | 44.95 | 34.90 | 32.86 | 34.27 |  |
 
 SacreBLEU scores on Tatoeba (2021/03) test set: 
 
 | Language//Model | 1     | 2     | 3     | 4     | 5     |
 | --------------- | ----- | ----- | ----- | ----- | ----- |
-| eng-mlt         | 45.36 | 34.14 | 33.92 |  |  |
-
-
-#### Preliminary experiments (2) with improved version of reconstruction model:
-- All the same
-- Re-trained reconstruction model
-	- 5e-5; 10 epochs
-- **To be added**
-
-SacreBLEU scores on Tatoeba (2021/08) test set:
-
-| Language//Model | 1     | 2     | 3     | 4         | 5   |
-| --------------- | ----- | ----- | ----- | --------- | --- |
-| eng-mlt         | 44.95 | 34.90 | 32.86 |  | |
-
-SacreBLEU scores on Tatoeba (2021/03) test set: 
-
-| Language//Model | 1     | 2     | 3     | 4         | 5   |
-| --------------- | ----- | ----- | ----- | --------- | --- |
-| eng-mlt         | 45.36 | 34.14 | 33.92 |  | |
-
-
-#### Preliminary experiments (3) with improved version of reconstruction model:
-- All the same
-- Re-trained reconstruction model
-	- 5e-5; 30 epochs
-- **To be added**
+| eng-mlt         | 45.36 | 34.14 | 33.92 | 34.15 |  |
 
 
 ### Schematics
