@@ -34,7 +34,7 @@ This project addresses the challenge of translating between low-resource languag
 
 #### Prelimenary experiments (1) with the first version of reconstruction model:
 - (1) Model from [Helsinki-NLP](https://huggingface.co/Helsinki-NLP/opus-mt-en-mt)
-    - trained on (TO BE ADDED)
+    - trained on TO BE ADDED
 - (2) Baseline trained on the full parallel corpus
     - ParaCrawl data
     - from scratch with the MarianMT architecture
@@ -65,6 +65,7 @@ SacreBLEU scores on Tatoeba (2021/03) test set:
 | --------------- | ----- | ----- | ----- | ----- | ----- | ----- |
 | eng-mlt         | 45.36 | 34.14 | 33.92 | **34.15** | 34.11 | **34.73** |
 
+- Conclusion so far: when using the reconstructed data instead of synthetic data, the performance is better, and it is reaching, or identical to, the performance of the model trained only on the original parallel corpus.
 
 ### Schematics
 <div align="center">
