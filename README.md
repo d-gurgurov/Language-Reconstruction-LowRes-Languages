@@ -31,7 +31,7 @@ This project addresses the challenge of translating between low-resource languag
 
 #### Prelimenary experiments (1) with the first version of reconstruction model:
 - (1) Model from [Helsinki-NLP](https://huggingface.co/Helsinki-NLP/opus-mt-en-mt)
-    - trained on TO BE ADDED
+    - trained on [OPUS-2020-01-08](https://github.com/Helsinki-NLP/OPUS-MT-train/blob/master/models/en-mt/README.md)
 - (2) Baseline trained on the full parallel corpus
     - ParaCrawl data
     - from scratch with the MarianMT architecture
