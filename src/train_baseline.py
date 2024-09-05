@@ -4,10 +4,20 @@ from datasets import Dataset
 from sklearn.model_selection import train_test_split
 import torch # type: ignore
 import numpy as np
+import argparse
+
+# parsing command line arguments
+parser = argparse.ArgumentParser(description='Training a baseline on full data')
+parser.add_argument('--language', type=str, required=True, help='Target language code (e.g., "sw" for Swahili)')
+args = parser.parse_args()
+
+# setting language code from command line argument
+language = args.language
+lang_map = {"sw": "swahili", "mt": "maltese"}
 
 # data
-first_half = pd.read_csv('/netscratch/dgurgurov/thesis/mt_lrls/results/first_half.csv')
-second_half = pd.read_csv('/netscratch/dgurgurov/thesis/mt_lrls/results/second_half.csv')
+first_half = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/first_half.csv')
+second_half = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/second_half.csv')
 
 # combining data
 data = pd.concat([first_half, second_half], ignore_index=True)
@@ -20,15 +30,15 @@ train_dataset = Dataset.from_pandas(train_data)
 val_dataset = Dataset.from_pandas(val_data)
 
 # initializing tokenizer and model from scratch
-tokenizer = MarianTokenizer.from_pretrained('Helsinki-NLP/opus-mt-en-mt')
-config = MarianConfig.from_pretrained('Helsinki-NLP/opus-mt-en-mt')
+tokenizer = MarianTokenizer.from_pretrained(f'Helsinki-NLP/opus-mt-en-{language}')
+config = MarianConfig.from_pretrained(f'Helsinki-NLP/opus-mt-en-{language}')
 model = MarianMTModel(config) # type: ignore
 
 # tokenization function
 def tokenize_function(examples):
     inputs = tokenizer(examples['en'], truncation=True, padding='max_length', max_length=256)
     with tokenizer.as_target_tokenizer():
-        targets = tokenizer(examples['mt'], truncation=True, padding='max_length', max_length=256)
+        targets = tokenizer(examples[language], truncation=True, padding='max_length', max_length=256)
     inputs['labels'] = targets['input_ids']
     return inputs
 
@@ -38,7 +48,7 @@ tokenized_val_dataset = val_dataset.map(tokenize_function, batched=True, num_pro
 
 # training arguments
 training_args = Seq2SeqTrainingArguments(
-    output_dir='./results',
+    output_dir=f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/baseline/',
     evaluation_strategy="steps",
     eval_steps=2000,
     save_steps=2000,
@@ -96,5 +106,5 @@ trainer = Trainer(
 
 trainer.train()
 
-trainer.save_model('/netscratch/dgurgurov/thesis/mt_lrls/baseline/')
-tokenizer.save_pretrained('/netscratch/dgurgurov/thesis/mt_lrls/baseline/')
+trainer.save_model(f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/baseline/')
+tokenizer.save_pretrained(f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/baseline/')
