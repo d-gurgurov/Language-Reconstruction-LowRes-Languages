@@ -4,12 +4,22 @@ import torch
 from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
 from datasets import load_dataset
+import argparse
+
+# parsing command line arguments
+parser = argparse.ArgumentParser(description='Additional BadLRL translation')
+parser.add_argument('--language', type=str, required=True, help='Target language code (e.g., "sw" for Swahili)')
+args = parser.parse_args()
+
+# setting language code from command line argument
+language = args.language
+lang_map = {"sw": "swahili", "mt": "maltese"}
 
 # GPU setup
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # pre-trained model and tokenizer (Maltese for now)
-model_name = 'Helsinki-NLP/opus-mt-en-mt'
+model_name = f'Helsinki-NLP/opus-mt-en-{language}'
 tokenizer = MarianTokenizer.from_pretrained(model_name)
 model = MarianMTModel.from_pretrained(model_name).to(device)
 
@@ -76,6 +86,6 @@ dataset = dataset.add_column('translated_text', translated_sentences)
 
 # convert to pandas DataFrame and save to CSV
 df = pd.DataFrame(dataset)
-df.to_csv('/netscratch/dgurgurov/thesis/mt_lrls/results/tinystories_badlrl.csv', index=False)
+df.to_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/tinystories_badlrl.csv', index=False)
 
 print("Translation completed and saved to CSV.")
