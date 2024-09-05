@@ -4,13 +4,34 @@ from datasets import Dataset
 from sklearn.model_selection import train_test_split
 import torch # type: ignore
 import numpy as np
+import argparse
+
+# parsing command line arguments
+parser = argparse.ArgumentParser(description='Training a baseline on full data')
+parser.add_argument('--language', type=str, required=True, help='Target language code (e.g., "sw" for Swahili)')
+args = parser.parse_args()
+
+# setting language code from command line argument
+language = args.language
+lang_map = {"sw": "swahili", "mt": "maltese"}
 
 # data
-first_half = pd.read_csv('/netscratch/dgurgurov/thesis/mt_lrls/results/tinystories_badlrl_1.csv')
-second_half = pd.read_csv('/netscratch/dgurgurov/thesis/mt_lrls/data/second_half.csv')
+first_half = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/tinystories_badlrl_1.csv', usecols=["text", "translated_text"])
+second_half = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/second_half.csv', usecols=["en", language])
+
+# renaming the columns in the second_half DataFrame
+new_column_names = {
+    'en': 'text',
+    language: 'translated_text'
+}
+
+second_half.rename(columns=new_column_names, inplace=True)
 
 # combining data
 data = pd.concat([first_half, second_half], ignore_index=True)
+
+# dropping na
+data.dropna(inplace=True)
 
 # splitting into train and validation sets
 train_data, val_data = train_test_split(data, test_size=0.1, random_state=42)
@@ -20,15 +41,15 @@ train_dataset = Dataset.from_pandas(train_data)
 val_dataset = Dataset.from_pandas(val_data)
 
 # initializing tokenizer and model from scratch
-tokenizer = MarianTokenizer.from_pretrained('Helsinki-NLP/opus-mt-en-mt')
-config = MarianConfig.from_pretrained('Helsinki-NLP/opus-mt-en-mt')
+tokenizer = MarianTokenizer.from_pretrained(f'Helsinki-NLP/opus-mt-en-{language}')
+config = MarianConfig.from_pretrained(f'Helsinki-NLP/opus-mt-en-{language}')
 model = MarianMTModel(config) # type: ignore
 
 # tokenization function
 def tokenize_function(examples):
-    inputs = tokenizer(examples['en'], truncation=True, padding='max_length', max_length=256)
+    inputs = tokenizer(examples['text'], truncation=True, padding='max_length', max_length=256)
     with tokenizer.as_target_tokenizer():
-        targets = tokenizer(examples['mt'], truncation=True, padding='max_length', max_length=256)
+        targets = tokenizer(examples['translated_text'], truncation=True, padding='max_length', max_length=256)
     inputs['labels'] = targets['input_ids']
     return inputs
 
@@ -36,15 +57,18 @@ def tokenize_function(examples):
 tokenized_train_dataset = train_dataset.map(tokenize_function, batched=True, num_proc=4, batch_size=32)
 tokenized_val_dataset = val_dataset.map(tokenize_function, batched=True, num_proc=4, batch_size=32)
 
+print("Length of train:", len(tokenized_train_dataset))
+print("Length of val:", len(tokenized_val_dataset))
+
 # training arguments
 training_args = Seq2SeqTrainingArguments(
-    output_dir='./results',
+    output_dir=f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/safecheck/',
     evaluation_strategy="steps",
-    eval_steps=2000,
-    save_steps=2000,
+    eval_steps=5000,
+    save_steps=5000,
     learning_rate=2e-5,
-    per_device_train_batch_size=128,
-    per_device_eval_batch_size=128,
+    per_device_train_batch_size=64,
+    per_device_eval_batch_size=64,
     num_train_epochs=10,
     load_best_model_at_end=True,
     weight_decay=0.01,
@@ -96,5 +120,5 @@ trainer = Trainer(
 
 trainer.train()
 
-trainer.save_model('/netscratch/dgurgurov/thesis/mt_lrls/models/safecheck/')
-tokenizer.save_pretrained('/netscratch/dgurgurov/thesis/mt_lrls/models/safecheck/')
+trainer.save_model(f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/safecheck/')
+tokenizer.save_pretrained(f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/safecheck/')
