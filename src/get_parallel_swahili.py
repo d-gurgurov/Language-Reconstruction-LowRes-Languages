@@ -9,23 +9,23 @@ import sys
 url = "http://data.statmt.org/gourmet/corpora/GoURMET-crawled.en-sw.zip"
 zip_path = "/netscratch/dgurgurov/projects2024/mt_lrls/results/GoURMET-crawled.en-sw.zip"
 
-# Download the zip file
+# downloading the zip file
 response = requests.get(url)
-# with open(zip_path, 'wb') as file:
-#    file.write(response.content)
+with open(zip_path, 'wb') as file:
+   file.write(response.content)
 
 # Step 2: Unzip the dataset
-# with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-#    zip_ref.extractall("/netscratch/dgurgurov/projects2024/mt_lrls/results")
+with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+   zip_ref.extractall("./results")
 
-# Path where files are extracted
-extracted_path = "/netscratch/dgurgurov/projects2024/mt_lrls/results/"
+# path where files are extracted
+extracted_path = "./results"
 
 # Step 3: Load the gzipped English and Swahili files
 en_file = os.path.join(extracted_path, "GoURMET-crawled.sw-en.en.gz")
 sw_file = os.path.join(extracted_path, "GoURMET-crawled.sw-es.sw.gz")
 
-# Read and decode the gzipped files
+# reading and decoding the gzipped files
 with gzip.open(en_file, "rt", encoding="utf-8") as f:
     en_lines = f.readlines()
 
@@ -48,5 +48,5 @@ first_half = df[:half_idx]
 second_half = df[half_idx:]
 
 # Step 6: Save to CSV files
-first_half.to_csv('/netscratch/dgurgurov/projects2024/mt_lrls/results/swahili/first_half.csv', index=False)
-second_half.to_csv('/netscratch/dgurgurov/projects2024/mt_lrls/results/swahili/second_half.csv', index=False)
+first_half.to_csv('/netscratch/dgurgurov/projects2024/mt_lrls/data/train_swahili/first_half.csv', index=False)
+second_half.to_csv('/netscratch/dgurgurov/projects2024/mt_lrls/data/train_swahili/second_half.csv', index=False)
