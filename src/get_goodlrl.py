@@ -3,13 +3,23 @@ from transformers import MarianMTModel, MarianTokenizer
 import torch # type: ignore
 from torch.utils.data import DataLoader, Dataset # type: ignore
 from tqdm import tqdm
+import argparse
+
+# parsing command line arguments
+parser = argparse.ArgumentParser(description='Translating BadLRL to GoodLRL')
+parser.add_argument('--language', type=str, required=True, help='Target language code (e.g., "sw" for Swahili)')
+args = parser.parse_args()
+
+# setting language code from command line argument
+language = args.language
+lang_map = {"sw": "swahili", "mt": "maltese"}
 
 # GPU setup
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # loading the trained model and tokenizer
-model_path = '/netscratch/dgurgurov/thesis/mt_lrls/models/reconstruction'
-tokenizer_path = '/netscratch/dgurgurov/thesis/mt_lrls/models/reconstruction'
+model_path = f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/reconstruction_30'
+tokenizer_path = f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/reconstruction_30'
 tokenizer = MarianTokenizer.from_pretrained(tokenizer_path)
 model = MarianMTModel.from_pretrained(model_path).to(device) # type: ignore
 
@@ -54,7 +64,7 @@ def translate_sentences_batch(dataloader, model):
     return translated
 
 # loading the synthetic dataset
-synthetic_data = pd.read_csv('/netscratch/dgurgurov/thesis/mt_lrls/results/tinystories_badlrl.csv')
+synthetic_data = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/tinystories_badlrl.csv')
 
 # extracting the synthetic sentences
 synthetic_sentences = synthetic_data['translated_text'].tolist()
@@ -70,6 +80,6 @@ translated_sentences = translate_sentences_batch(dataloader, model)
 synthetic_data['good_lrl'] = translated_sentences
 
 # Save the translated dataset to CSV
-synthetic_data.to_csv('/netscratch/dgurgurov/thesis/mt_lrls/results/tinystories_goodlrl.csv', index=False)
+synthetic_data.to_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/tinystories_goodlrl_30.csv', index=False)
 
-print("Translation completed and saved to '/netscratch/dgurgurov/thesis/mt_lrls/results/tinystories_goodlrl.csv'")
+print(f"Translation completed and saved to '/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/tinystories_goodlrl_30.csv'")
