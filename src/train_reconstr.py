@@ -4,9 +4,19 @@ from datasets import Dataset
 import torch # type: ignore
 from sklearn.model_selection import train_test_split
 import numpy as np
+import argparse
+
+# parsing command line arguments
+parser = argparse.ArgumentParser(description='Training a baseline on full data')
+parser.add_argument('--language', type=str, required=True, help='Target language code (e.g., "sw" for Swahili)')
+args = parser.parse_args()
+
+# setting language code from command line argument
+language = args.language
+lang_map = {"sw": "swahili", "mt": "maltese"}
 
 # training data
-train_data = pd.read_csv('/netscratch/dgurgurov/thesis/mt_lrls/data/badlrl_first_half.csv')
+train_data = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/badlrl_first_half.csv')
 train_data, val_data = train_test_split(train_data, test_size=0.1, random_state=42)
 
 # converting the data into HF datasets
@@ -14,10 +24,10 @@ train_dataset = Dataset.from_pandas(train_data)
 val_dataset = Dataset.from_pandas(val_data)
 
 # tokenizer and model
-model_name = 'Helsinki-NLP/opus-mt-mt-en'
+model_name = f'Helsinki-NLP/opus-mt-en-{language}'
 config = MarianConfig.from_pretrained(model_name)
 tokenizer = MarianTokenizer.from_pretrained(model_name)
-model = MarianMTModel.from_pretrained(model_name)
+model = MarianMTModel(config)
 
 # tokenizing the data
 def tokenize_function(examples):
@@ -25,7 +35,7 @@ def tokenize_function(examples):
     # UPDATE: fixed now. let's rerun the experiments
     inputs = tokenizer(examples['bad_lrl'], truncation=True, padding='max_length', max_length=256)
     with tokenizer.as_target_tokenizer():
-        targets = tokenizer(examples['mt'], truncation=True, padding='max_length', max_length=256)
+        targets = tokenizer(examples[language], truncation=True, padding='max_length', max_length=256)
     inputs['labels'] = targets['input_ids']
     return inputs
 
@@ -34,13 +44,13 @@ tokenized_val_dataset = val_dataset.map(tokenize_function, batched=True, num_pro
 
 # training arguments
 training_args = Seq2SeqTrainingArguments(
-    output_dir='/netscratch/dgurgurov/thesis/mt_lrls/models/reconstruction_30',
+    output_dir=f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/reconstruction_30',
     evaluation_strategy="steps",
-    eval_steps=5000, # change to 10000
-    save_steps=5000,
+    eval_steps=2000, # change to 10000
+    save_steps=2000,
     learning_rate=5e-5,
-    per_device_train_batch_size=128,
-    per_device_eval_batch_size=128, 
+    per_device_train_batch_size=64,
+    per_device_eval_batch_size=64, 
     num_train_epochs=30,
     load_best_model_at_end=True,
     weight_decay=0.01,
@@ -92,5 +102,5 @@ trainer = Trainer(
 trainer.train()
 
 # save
-trainer.save_model('/netscratch/dgurgurov/thesis/mt_lrls/models/reconstruction_30')
-tokenizer.save_pretrained('/netscratch/dgurgurov/thesis/mt_lrls/models/reconstruction_30')
+trainer.save_model(f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/reconstruction_30')
+tokenizer.save_pretrained(f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/reconstruction_30')
