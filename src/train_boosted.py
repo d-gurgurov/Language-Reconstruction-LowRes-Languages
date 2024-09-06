@@ -16,11 +16,18 @@ language = args.language
 lang_map = {"sw": "swahili", "mt": "maltese"}
 
 # data
-first_half = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/tinystories_goodlrl_1.csv')
-second_half = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/second_half.csv')
+first_half = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/tinystories_goodlrl_1.csv', keep_default_na=False)
+second_half = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/second_half.csv', keep_default_na=False)
+
+# renaming the two columns to 'text' and 'good_lrl'
+second_half.rename(columns={"en": 'text', "sw": 'good_lrl'}, inplace=True)
 
 # combining data
 data = pd.concat([first_half, second_half], ignore_index=True)
+
+# renaming the two columns back for translation
+data.rename(columns={'text': 'en', 'good_lrl': language}, inplace=True)
+
 
 # splitting into train and validation sets
 train_data, val_data = train_test_split(data, test_size=0.1, random_state=42)
@@ -53,8 +60,8 @@ training_args = Seq2SeqTrainingArguments(
     eval_steps=2000,
     save_steps=2000,
     learning_rate=2e-5,
-    per_device_train_batch_size=128,
-    per_device_eval_batch_size=128,
+    per_device_train_batch_size=64,
+    per_device_eval_batch_size=64,
     num_train_epochs=10,
     load_best_model_at_end=True,
     weight_decay=0.01,
