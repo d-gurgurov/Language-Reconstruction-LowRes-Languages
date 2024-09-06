@@ -36,9 +36,9 @@ model = MarianMTModel(config) # type: ignore
 
 # tokenization function
 def tokenize_function(examples):
-    inputs = tokenizer(examples['en'], truncation=True, padding='max_length', max_length=256)
+    inputs = tokenizer(examples['en'], truncation=True, padding='max_length', max_length=512)
     with tokenizer.as_target_tokenizer():
-        targets = tokenizer(examples[language], truncation=True, padding='max_length', max_length=256)
+        targets = tokenizer(examples[language], truncation=True, padding='max_length', max_length=512)
     inputs['labels'] = targets['input_ids']
     return inputs
 
@@ -48,14 +48,14 @@ tokenized_val_dataset = val_dataset.map(tokenize_function, batched=True, num_pro
 
 # training arguments
 training_args = Seq2SeqTrainingArguments(
-    output_dir=f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/baseline/',
+    output_dir=f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/baseline/results',
     evaluation_strategy="steps",
-    eval_steps=2000,
-    save_steps=2000,
+    eval_steps=1000,
+    save_steps=1000,
     learning_rate=2e-5,
-    per_device_train_batch_size=128,
-    per_device_eval_batch_size=128,
-    num_train_epochs=10,
+    per_device_train_batch_size=64,
+    per_device_eval_batch_size=64,
+    num_train_epochs=20,
     load_best_model_at_end=True,
     weight_decay=0.01,
     save_total_limit=2,

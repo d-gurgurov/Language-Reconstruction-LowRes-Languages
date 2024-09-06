@@ -5,6 +5,7 @@ from sklearn.model_selection import train_test_split
 import torch # type: ignore
 import numpy as np
 import argparse
+import sys
 
 # parsing command line arguments
 parser = argparse.ArgumentParser(description='Training a baseline on full data')
@@ -47,9 +48,9 @@ model = MarianMTModel(config) # type: ignore
 
 # tokenization function
 def tokenize_function(examples):
-    inputs = tokenizer(examples['text'], truncation=True, padding='max_length', max_length=256)
+    inputs = tokenizer(examples['text'], truncation=True, padding='max_length', max_length=512)
     with tokenizer.as_target_tokenizer():
-        targets = tokenizer(examples['translated_text'], truncation=True, padding='max_length', max_length=256)
+        targets = tokenizer(examples['translated_text'], truncation=True, padding='max_length', max_length=512)
     inputs['labels'] = targets['input_ids']
     return inputs
 
@@ -62,14 +63,14 @@ print("Length of val:", len(tokenized_val_dataset))
 
 # training arguments
 training_args = Seq2SeqTrainingArguments(
-    output_dir=f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/safecheck/',
+    output_dir=f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/safecheck/results',
     evaluation_strategy="steps",
-    eval_steps=5000,
-    save_steps=5000,
+    eval_steps=1000,
+    save_steps=1000,
     learning_rate=2e-5,
     per_device_train_batch_size=64,
     per_device_eval_batch_size=64,
-    num_train_epochs=10,
+    num_train_epochs=20,
     load_best_model_at_end=True,
     weight_decay=0.01,
     save_total_limit=2,
