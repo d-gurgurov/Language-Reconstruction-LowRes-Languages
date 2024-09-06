@@ -10,10 +10,11 @@ args = parser.parse_args()
 # setting language code from command line argument
 language = args.language
 lrl = args.lrl
-lang_map = {"sw": "swahili", "mt": "maltese"}
+lang_map = {"sw": "swahili", "mt": "maltese", "ga": "irish", "is": "icelandic",
+            "tl": "tagalog", "hr": "croatian", "nn": "norwegian"}
 
 # loading the CSV file
-df = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/tinystories_{lrl}_30.csv')
+df = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/tinystories_{lrl}.csv')
 
 # determining the midpoint
 midpoint = len(df) // 2

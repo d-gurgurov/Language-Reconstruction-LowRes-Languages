@@ -14,7 +14,8 @@ args = parser.parse_args()
 
 # setting language code from command line argument
 language = args.language
-lang_map = {"sw": "swahili", "mt": "maltese"}
+lang_map = {"sw": "swahili", "mt": "maltese", "ga": "irish", "is": "icelandic",
+            "tl": "tagalog", "hr": "croatian", "nn": "norwegian"}
 
 # data
 first_half = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/tinystories_badlrl_1.csv', usecols=["text", "translated_text"])
@@ -79,6 +80,7 @@ training_args = Seq2SeqTrainingArguments(
     ddp_find_unused_parameters=False,
     fp16=True,  # using FP16 only if a GPU is available
     torch_compile=True,
+    seed=42
 )
 
 # metrics 

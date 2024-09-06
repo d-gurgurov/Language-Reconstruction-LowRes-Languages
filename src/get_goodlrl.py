@@ -12,14 +12,15 @@ args = parser.parse_args()
 
 # setting language code from command line argument
 language = args.language
-lang_map = {"sw": "swahili", "mt": "maltese"}
+lang_map = {"sw": "swahili", "mt": "maltese", "ga": "irish", "is": "icelandic",
+            "tl": "tagalog", "hr": "croatian", "nn": "norwegian"}
 
 # GPU setup
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # loading the trained model and tokenizer
-model_path = f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/reconstruction_30'
-tokenizer_path = f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/reconstruction_30'
+model_path = f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/reconstruction'
+tokenizer_path = f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/reconstruction'
 tokenizer = MarianTokenizer.from_pretrained(tokenizer_path)
 model = MarianMTModel.from_pretrained(model_path).to(device) # type: ignore
 
@@ -80,6 +81,6 @@ translated_sentences = translate_sentences_batch(dataloader, model)
 synthetic_data['good_lrl'] = translated_sentences
 
 # Save the translated dataset to CSV
-synthetic_data.to_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/tinystories_goodlrl_30.csv', index=False)
+synthetic_data.to_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/tinystories_goodlrl.csv', index=False)
 
-print(f"Translation completed and saved to '/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/tinystories_goodlrl_30.csv'")
+print(f"Translation completed and saved to '/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/tinystories_goodlrl.csv'")

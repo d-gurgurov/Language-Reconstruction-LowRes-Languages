@@ -13,7 +13,8 @@ args = parser.parse_args()
 
 # setting language code from command line argument
 language = args.language
-lang_map = {"sw": "swahili", "mt": "maltese"}
+lang_map = {"sw": "swahili", "mt": "maltese", "ga": "irish", "is": "icelandic",
+            "tl": "tagalog", "hr": "croatian", "nn": "norwegian"}
 
 # GPU setup
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')

@@ -13,7 +13,8 @@ args = parser.parse_args()
 language = args.language
 
 # arguments
-lang_map = {"sw": "swahili", "mt": "maltese"}
+lang_map = {"sw": "swahili", "mt": "maltese", "ga": "irish", "is": "icelandic",
+            "tl": "tagalog", "hr": "croatian", "nn": "norwegian"}
 
 # gpu set-up
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -33,7 +34,7 @@ def translate_sentences_batch(sentences, tokenizer, model, batch_size=64):
     translated = []
     for i in tqdm(range(0, len(sentences), batch_size)):
         batch = sentences[i:i+batch_size]
-        inputs = tokenizer(batch, return_tensors='pt', padding=True, truncation=True, max_length=256).to(device)
+        inputs = tokenizer(batch, return_tensors='pt', padding=True, truncation=True, max_length=512).to(device)
         
         with torch.no_grad():
             with torch.cuda.amp.autocast():
@@ -50,4 +51,4 @@ print("Length of the first half:", len(first_half))
 # translating the English sentences in the first half to the low-resource language
 first_half['bad_lrl'] = translate_sentences_batch(first_half['en'].tolist(), tokenizer, model)
 
-first_half.to_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/badlrl_first_half.csv', index=False)
+first_half.to_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/first_half_badlrl.csv', index=False)

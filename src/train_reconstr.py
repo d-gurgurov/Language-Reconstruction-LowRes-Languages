@@ -13,10 +13,11 @@ args = parser.parse_args()
 
 # setting language code from command line argument
 language = args.language
-lang_map = {"sw": "swahili", "mt": "maltese"}
+lang_map = {"sw": "swahili", "mt": "maltese", "ga": "irish", "is": "icelandic",
+            "tl": "tagalog", "hr": "croatian", "nn": "norwegian"}
 
 # training data
-train_data = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/badlrl_first_half.csv')
+train_data = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/first_half_badlrl.csv')
 train_data, val_data = train_test_split(train_data, test_size=0.1, random_state=42)
 
 # converting the data into HF datasets
@@ -44,7 +45,7 @@ tokenized_val_dataset = val_dataset.map(tokenize_function, batched=True, num_pro
 
 # training arguments
 training_args = Seq2SeqTrainingArguments(
-    output_dir=f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/reconstruction_30/results',
+    output_dir=f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/reconstruction/results',
     evaluation_strategy="steps",
     eval_steps=1000, # change to 10000
     save_steps=1000,
@@ -60,6 +61,7 @@ training_args = Seq2SeqTrainingArguments(
     ddp_find_unused_parameters=False,
     fp16=True, 
     torch_compile=True,
+    seed=42
 )
 
 from datasets import load_metric
@@ -102,5 +104,5 @@ trainer = Trainer(
 trainer.train()
 
 # save
-trainer.save_model(f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/reconstruction_30')
-tokenizer.save_pretrained(f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/reconstruction_30')
+trainer.save_model(f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/reconstruction')
+tokenizer.save_pretrained(f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/reconstruction')
