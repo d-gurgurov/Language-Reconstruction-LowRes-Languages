@@ -3,15 +3,14 @@ from transformers import MarianMTModel, MarianTokenizer
 import torch
 from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
-from datasets import load_dataset
 import argparse
 
-# parsing command line arguments
-parser = argparse.ArgumentParser(description='Additional BadLRL translation')
+# Parsing command line arguments
+parser = argparse.ArgumentParser(description='Translate saved dataset')
 parser.add_argument('--language', type=str, required=True, help='Target language code (e.g., "sw" for Swahili)')
 args = parser.parse_args()
 
-# setting language code from command line argument
+# Setting language code from command line argument
 language = args.language
 lang_map = {"sw": "swahili", "mt": "maltese", "ga": "irish", "is": "icelandic",
             "tl": "tagalog", "hr": "croatian", "nn": "norwegian"}
@@ -19,17 +18,17 @@ lang_map = {"sw": "swahili", "mt": "maltese", "ga": "irish", "is": "icelandic",
 # GPU setup
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-# pre-trained model and tokenizer (Maltese for now)
+# Pre-trained model and tokenizer
 model_name = f'Helsinki-NLP/opus-mt-en-{language}'
 tokenizer = MarianTokenizer.from_pretrained(model_name)
 model = MarianMTModel.from_pretrained(model_name).to(device)
 
-# for multiple GPUs
+# For multiple GPUs
 if torch.cuda.device_count() > 1:
     print(f"Using {torch.cuda.device_count()} GPUs")
     model = torch.nn.DataParallel(model)
 
-# custom Dataset class
+# Custom Dataset class
 class TranslationDataset(Dataset):
     def __init__(self, texts):
         self.texts = texts
@@ -40,53 +39,47 @@ class TranslationDataset(Dataset):
     def __getitem__(self, idx):
         return self.texts[idx]
 
-# function to collate batches
+# Function to collate batches with input validation
 def collate_fn(batch):
-    inputs = tokenizer(batch, return_tensors='pt', padding=True, truncation=True, max_length=512)
+    # Filter out any non-string entries and empty strings
+    valid_batch = [text for text in batch if isinstance(text, str) and text.strip() != '']
+    
+    if not valid_batch:
+        return None  # Return None if there's nothing valid in the batch
+
+    inputs = tokenizer(valid_batch, return_tensors='pt', padding=True, truncation=True, max_length=512)
     return inputs.input_ids, inputs.attention_mask
 
-# function to translate sentences in batches
-def translate_sentences_batch(dataloader, model):
-    model.eval()
-    translated = []
-    for batch in tqdm(dataloader):
-        input_ids, attention_mask = batch
-        input_ids = input_ids.to(device)
-        attention_mask = attention_mask.to(device)
-        
-        with torch.no_grad():
-            with torch.cuda.amp.autocast():
-                outputs = model.module.generate(input_ids, attention_mask=attention_mask) if isinstance(model, torch.nn.DataParallel) else model.generate(input_ids, attention_mask=attention_mask)
-        
-        batch_translated = tokenizer.batch_decode(outputs, skip_special_tokens=True)
-        translated.extend(batch_translated)
-    return translated
+# Load the filtered dataset from CSV
+df = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/tinystories_badlrl_filtered.csv')
+filtered_subset = df['text'].tolist()
 
-# load the dataset from Hugging Face
-dataset = load_dataset("roneneldan/TinyStories", split='train')
-print("Length of the dataset:", len(dataset))
+# Create DataLoader for the filtered subset
+translation_dataset = TranslationDataset(filtered_subset)
+dataloader = DataLoader(translation_dataset, batch_size=64, collate_fn=collate_fn, num_workers=4)
 
-# calculate 20% of the dataset
-subset_size = int(len(dataset) * 0.2)
+# Translate the English sentences to the low-resource language
+translated_sentences = []
+for batch in tqdm(dataloader):
+    if batch is None:  # Skip any batches that are invalid (if all entries were invalid)
+        continue
+    
+    input_ids, attention_mask = batch[0].to(device), batch[1].to(device)
+    
+    with torch.no_grad():
+        with torch.cuda.amp.autocast():
+            outputs = model.module.generate(input_ids, attention_mask=attention_mask) if isinstance(model, torch.nn.DataParallel) else model.generate(input_ids, attention_mask=attention_mask)
+    
+    batch_translated = tokenizer.batch_decode(outputs, skip_special_tokens=True)
+    translated_sentences.extend(batch_translated)
 
-# create a 20% subset
-dataset = dataset.select(range(subset_size))
+# Add the translated sentences to the dataset (as a DataFrame)
+df_translations = pd.DataFrame({
+    'original_text': filtered_subset,
+    'translated_text': translated_sentences,
+})
 
-# extract the English sentences
-english_sentences = dataset['text']
-
-# create DataLoader
-translation_dataset = TranslationDataset(english_sentences)
-dataloader = DataLoader(translation_dataset, batch_size=128, collate_fn=collate_fn, num_workers=4)
-
-# translate the English sentences to the low-resource language
-translated_sentences = translate_sentences_batch(dataloader, model)
-
-# add the translated sentences to the dataset
-dataset = dataset.add_column('translated_text', translated_sentences)
-
-# convert to pandas DataFrame and save to CSV
-df = pd.DataFrame(dataset)
-df.to_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/tinystories_badlrl.csv', index=False)
+# Save to CSV
+df_translations.to_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/tinystories_badlrl.csv', index=False)
 
 print("Translation completed and saved to CSV.")
