@@ -7,7 +7,7 @@ import numpy as np
 import argparse
 
 # parsing command line arguments
-parser = argparse.ArgumentParser(description='Training a baseline on full data')
+parser = argparse.ArgumentParser(description='Training a reconstruction model on half data')
 parser.add_argument('--language', type=str, required=True, help='Target language code (e.g., "sw" for Swahili)')
 args = parser.parse_args()
 
@@ -17,7 +17,7 @@ lang_map = {"sw": "swahili", "mt": "maltese", "ga": "irish", "is": "icelandic",
             "tl": "tagalog", "hr": "croatian", "nn": "norwegian"}
 
 # training data
-train_data = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/first_half_badlrl.csv')
+train_data = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/first_half_badlrl.csv', keep_default_na=False)
 train_data, val_data = train_test_split(train_data, test_size=0.1, random_state=42)
 
 # converting the data into HF datasets
@@ -28,7 +28,7 @@ val_dataset = Dataset.from_pandas(val_data)
 model_name = f'Helsinki-NLP/opus-mt-en-{language}'
 config = MarianConfig.from_pretrained(model_name)
 tokenizer = MarianTokenizer.from_pretrained(model_name)
-model = MarianMTModel(config)
+model = MarianMTModel(config) # type: ignore
 
 # tokenizing the data
 def tokenize_function(examples):
@@ -47,17 +47,17 @@ tokenized_val_dataset = val_dataset.map(tokenize_function, batched=True, num_pro
 training_args = Seq2SeqTrainingArguments(
     output_dir=f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/reconstruction/results',
     evaluation_strategy="steps",
-    eval_steps=1000, # change to 10000
-    save_steps=1000,
+    eval_steps=2000, # change to 10000
+    save_steps=2000,
     learning_rate=5e-5,
-    per_device_train_batch_size=64,
+    per_device_train_batch_size=64, # (64 for ga, is) and (32 for mt, sw, tl)
     per_device_eval_batch_size=64, 
-    num_train_epochs=30,
+    num_train_epochs=20,
     load_best_model_at_end=True,
     weight_decay=0.01,
     save_total_limit=2,
     predict_with_generate=True,
-    gradient_accumulation_steps=2,
+    gradient_accumulation_steps=4,
     ddp_find_unused_parameters=False,
     fp16=True, 
     torch_compile=True,
@@ -94,10 +94,10 @@ def preprocess_logits(logits, labels):
 trainer = Trainer( 
     model=model,
     args=training_args,
-    train_dataset=tokenized_train_dataset,
-    eval_dataset=tokenized_val_dataset,
+    train_dataset=tokenized_train_dataset, # type: ignore
+    eval_dataset=tokenized_val_dataset, # type: ignore
     compute_metrics=compute_bleu,
-    preprocess_logits_for_metrics=preprocess_logits 
+    preprocess_logits_for_metrics=preprocess_logits # type: ignore
 )
 
 # train

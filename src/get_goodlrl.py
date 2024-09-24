@@ -21,6 +21,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # loading the trained model and tokenizer
 model_path = f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/reconstruction'
 tokenizer_path = f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/reconstruction'
+# tokenizer_path = "Helsinki-NLP/opus-mt-en-is"
 tokenizer = MarianTokenizer.from_pretrained(tokenizer_path)
 model = MarianMTModel.from_pretrained(model_path).to(device) # type: ignore
 
@@ -72,7 +73,7 @@ synthetic_sentences = synthetic_data['translated_text'].tolist()
 
 # creating DataLoader
 translation_dataset = TranslationDataset(synthetic_sentences)
-dataloader = DataLoader(translation_dataset, batch_size=128, collate_fn=collate_fn, num_workers=4)
+dataloader = DataLoader(translation_dataset, batch_size=64, collate_fn=collate_fn, num_workers=4)
 
 # translating the synthetic sentences
 translated_sentences = translate_sentences_batch(dataloader, model)

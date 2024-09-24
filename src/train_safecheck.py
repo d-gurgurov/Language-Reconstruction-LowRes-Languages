@@ -18,12 +18,12 @@ lang_map = {"sw": "swahili", "mt": "maltese", "ga": "irish", "is": "icelandic",
             "tl": "tagalog", "hr": "croatian", "nn": "norwegian"}
 
 # data
-first_half = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/tinystories_badlrl_1.csv', usecols=["text", "translated_text"])
+first_half = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/tinystories_badlrl_1.csv', usecols=["original_text", "translated_text"])
 second_half = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/second_half.csv', usecols=["en", language])
 
 # renaming the columns in the second_half DataFrame
 new_column_names = {
-    'en': 'text',
+    'en': 'original_text',
     language: 'translated_text'
 }
 
@@ -49,7 +49,7 @@ model = MarianMTModel(config) # type: ignore
 
 # tokenization function
 def tokenize_function(examples):
-    inputs = tokenizer(examples['text'], truncation=True, padding='max_length', max_length=512)
+    inputs = tokenizer(examples['original_text'], truncation=True, padding='max_length', max_length=512)
     with tokenizer.as_target_tokenizer():
         targets = tokenizer(examples['translated_text'], truncation=True, padding='max_length', max_length=512)
     inputs['labels'] = targets['input_ids']
@@ -66,11 +66,11 @@ print("Length of val:", len(tokenized_val_dataset))
 training_args = Seq2SeqTrainingArguments(
     output_dir=f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/safecheck/results',
     evaluation_strategy="steps",
-    eval_steps=1000,
-    save_steps=1000,
+    eval_steps=2000,
+    save_steps=2000,
     learning_rate=2e-5,
-    per_device_train_batch_size=64,
-    per_device_eval_batch_size=64,
+    per_device_train_batch_size=32, # (64 for ga, is) and (32 for mt, sw, tl)
+    per_device_eval_batch_size=32,
     num_train_epochs=20,
     load_best_model_at_end=True,
     weight_decay=0.01,

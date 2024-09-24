@@ -18,17 +18,17 @@ lang_map = {"sw": "swahili", "mt": "maltese", "ga": "irish", "is": "icelandic",
             "tl": "tagalog", "hr": "croatian", "nn": "norwegian"}
 
 # data
-first_half = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/tinystories_goodlrl_1.csv', keep_default_na=False)
+first_half = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/tinystories_goodlrl_1.csv', usecols=["original_text", "good_lrl"], keep_default_na=False)
 second_half = pd.read_csv(f'/netscratch/dgurgurov/projects2024/mt_lrls/data/train_{lang_map[language]}/second_half.csv', keep_default_na=False)
 
 # renaming the two columns to 'text' and 'good_lrl'
-second_half.rename(columns={"en": 'text', "sw": 'good_lrl'}, inplace=True)
+second_half.rename(columns={"en": 'original_text', language: 'good_lrl'}, inplace=True)
 
 # combining data
 data = pd.concat([first_half, second_half], ignore_index=True)
 
 # renaming the two columns back for translation
-data.rename(columns={'text': 'en', 'good_lrl': language}, inplace=True)
+data.rename(columns={'original_text': 'en', 'good_lrl': language}, inplace=True)
 
 
 # splitting into train and validation sets
@@ -59,11 +59,11 @@ tokenized_val_dataset = val_dataset.map(tokenize_function, batched=True, num_pro
 training_args = Seq2SeqTrainingArguments(
     output_dir=f'/netscratch/dgurgurov/projects2024/mt_lrls/models/{lang_map[language]}/boosted/results',
     evaluation_strategy="steps",
-    eval_steps=1000,
-    save_steps=1000,
+    eval_steps=2000,
+    save_steps=2000,
     learning_rate=2e-5,
-    per_device_train_batch_size=64,
-    per_device_eval_batch_size=64,
+    per_device_train_batch_size=32, # (64 for ga, is) and (32 for mt, sw, tl)
+    per_device_eval_batch_size=32,
     num_train_epochs=20,
     load_best_model_at_end=True,
     weight_decay=0.01,
