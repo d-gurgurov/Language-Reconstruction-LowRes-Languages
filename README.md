@@ -12,57 +12,6 @@ This project addresses the challenge of translating between low-resource languag
 3. **Synthetic Data Generation**: Utilize the two previous systems to create re-fined synthetic parallel data (PD<sub>synthetic</sub>).
 4. **Final Model Training**: Train the final MT model using both the second half of the parallel data (PD<sub>secondhalf</sub>) and the re-fined synthetic data (PD<sub>synthetic</sub>).
 
-### Prelimenary experimental steps
-
-- (1) Find parallel corpus for English-Maltese & MT system + 
-	- [en-mt](https://live.european-language-grid.eu/catalogue/corpus/7072) from ParaCrawl
-	- Helsinki-NLP
-- (2) Train a baseline model on this parallel corpus + 
-- (3) Translate the parallel corpus to get BadLRL + 
-- (4) Train a reconstruction model for BadLRL to GoodLRL +
-    	- trained with = 2e-5; 30 epochs --> from scratch
-- (5) Find a monolingual corpus & translate it with Helsinki-NLP to get BadLRL +
-	- [TinyStories](https://huggingface.co/datasets/roneneldan/TinyStories?row=10)
-- (6) Reconstruct the BadLRL from tinystories with the reconstruction model + 
-- (7) Train a model with 50% parallel corpus and 50% BadLRL from step 5 +
-	- safe-check + 
-- (8) Train a model with 50% parallel corpus and 50% reconstructed BadLRL from step 6 + 
-- (9) Compare models from steps 7 and 8 +
-
-#### Prelimenary experiments (1) with the first version of reconstruction model:
-- (1) Model from [Helsinki-NLP](https://huggingface.co/Helsinki-NLP/opus-mt-en-mt)
-    - trained on [OPUS-2020-01-08](https://github.com/Helsinki-NLP/OPUS-MT-train/blob/master/models/en-mt/README.md)
-- (2) Baseline trained on the full parallel corpus
-    - ParaCrawl data
-    - from scratch with the MarianMT architecture
-    - 10 epochs with lr of 2e-5
-- (3) Safe-check trained on the 50% parallel corpus and 50% badlrl
-    - from scratch with the MarianMT architecture
-    - 10 epochs with lr of 2e-5
-- (4) *Model trained on the 50% parallel corpus and 50% badlrl2lrl*
-    - from scratch with the MarianMT architecture
-    - 10 epochs with lr of 2e-5
-- (5) Train a safecheck on the 50% parallel corpus and 100% badlrl
-    - from scratch with the MarianMT architecture
-    - 10 epochs with lr of 2e-5
-- (6) Model trained on the 50% parallel corpus and 100% badlrl2lrl
-    - from scratch with the MarianMT architecture
-    - 10 epochs with lr of 2e-5
-- Reconstruction model trained with = 2e-5; 30 epochs
-
-SacreBLEU scores on Tatoeba (2021/08) test set:
-
-| Language//Model | 1     | 2     | 3     | 4     | 5     | 6     |
-| --------------- | ----- | ----- | ----- | ----- | ----- | ----- |
-| eng-mlt         | 44.95 | 34.90 | 32.86 | **34.27** | 34.34 | **35.02** |
-
-SacreBLEU scores on Tatoeba (2021/03) test set: 
-
-| Language//Model | 1     | 2     | 3     | 4     | 5     | 6     |
-| --------------- | ----- | ----- | ----- | ----- | ----- | ----- |
-| eng-mlt         | 45.36 | 34.14 | 33.92 | **34.15** | 34.11 | **34.73** |
-
-- Conclusion so far: when using the reconstructed data instead of synthetic data, the performance is better, and it is reaching, or identical to, the performance of the model trained only on the original parallel corpus.
 
 ### Schematics
 <div align="center">
