@@ -2,33 +2,36 @@
 
 pip install -r requirements.txt
 
-# Set up directories and file paths
-TYPE="500k"
-OUT_DIR="data-bin/mt-en-boosted-$TYPE"
-mkdir -p $OUT_DIR
+LANGUAGE="sl"
 
-BASE_CORPUS="/netscratch/dgurgurov/projects2024/mt_lrls/parallel_data_mt/en-mt/opus.en-mt"
-NEWSCRAWL_EN="/netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/newscrawl/newscrawl.1m.en"
-NEWSCRAWL_MT="/netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/reconstruct/reordered.newscrawl.boost.1m.mt"
-BPE_CODES="/netscratch/dgurgurov/projects2024/mt_lrls/parallel_data_mt/en-mt/codes.bpe"
+# Set up directories and file paths
+TYPE="200k"
+OUT_DIR="data-bin/$LANGUAGE-en-boosted-$TYPE"
+mkdir -p $OUT_DIR
+mkdir -p checkpoints/transformer_${LANGUAGE}_en_boosted_$TYPE
+
+BASE_CORPUS="/netscratch/dgurgurov/projects2024/mt_lrls/parallel_data_mt/en-$LANGUAGE/opus.en-$LANGUAGE"
+NEWSCRAWL_EN="/netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/newscrawl_$LANGUAGE/newscrawl.1m.en"
+NEWSCRAWL_MT="/netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/reconstruct_$LANGUAGE/reordered.newscrawl.boost.1m.$LANGUAGE"
+BPE_CODES="/netscratch/dgurgurov/projects2024/mt_lrls/parallel_data_mt/en-$LANGUAGE/codes.bpe"
 
 # Number of lines to take from NewsCrawl
-NUM_LINES=500000
+NUM_LINES=200000
 
 echo "Preparing training data by combining original corpus with NewsCrawl..."
 cat $BASE_CORPUS-train.en <(head -n $NUM_LINES $NEWSCRAWL_EN) > $OUT_DIR/train.en
-cat $BASE_CORPUS-train.mt <(head -n $NUM_LINES $NEWSCRAWL_MT) > $OUT_DIR/train.mt
+cat $BASE_CORPUS-train.$LANGUAGE <(head -n $NUM_LINES $NEWSCRAWL_MT) > $OUT_DIR/train.$LANGUAGE
 
 
 echo "Copying validation and test sets..."
 cp $BASE_CORPUS-dev.en $OUT_DIR/dev.en
-cp $BASE_CORPUS-dev.mt $OUT_DIR/dev.mt
+cp $BASE_CORPUS-dev.$LANGUAGE $OUT_DIR/dev.$LANGUAGE
 cp $BASE_CORPUS-test.en $OUT_DIR/test.en
-cp $BASE_CORPUS-test.mt $OUT_DIR/test.mt
+cp $BASE_CORPUS-test.$LANGUAGE $OUT_DIR/test.$LANGUAGE
 
 echo "Applying BPE tokenization..."
 for SPLIT in train dev test; do
-    for LANG in en mt; do
+    for LANG in en $LANGUAGE; do
         subword-nmt apply-bpe -c $BPE_CODES < $OUT_DIR/${SPLIT}.${LANG} > $OUT_DIR/${SPLIT}.bpe.${LANG}
     done
 done
@@ -37,14 +40,14 @@ echo "All steps completed. Tokenized files are in $OUT_DIR."
 
 echo "Running Fairseq Preprocessing..."
 fairseq-preprocess \
-    --source-lang mt \
+    --source-lang $LANGUAGE \
     --target-lang en \
     --trainpref $OUT_DIR/train.bpe \
     --validpref $OUT_DIR/dev.bpe \
     --testpref $OUT_DIR/test.bpe \
     --destdir $OUT_DIR \
-    --srcdict /netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/en-mt/dict.en.txt \
-    --tgtdict /netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/en-mt/dict.mt.txt \
+    --srcdict /netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/en-$LANGUAGE/dict.en.txt \
+    --tgtdict /netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/en-$LANGUAGE/dict.$LANGUAGE.txt \
     --workers 20
 
 export CUDA_VISIBLE_DEVICES=0,1,2,3
@@ -83,10 +86,10 @@ fairseq-train \
     --decoder-embed-dim 512 \
     --decoder-ffn-embed-dim 2048 \
     --decoder-attention-heads 8 \
-    --save-dir checkpoints/transformer_mt_en_boosted_$TYPE \
+    --save-dir checkpoints/transformer_${LANGUAGE}_en_boosted_$TYPE \
     --log-format json \
     --log-interval 100 \
-    --log-file checkpoints/transformer_mt_en_boosted_$TYPE/log_mt_en.json \
+    --log-file checkpoints/transformer_${LANGUAGE}_en_boosted_$TYPE/log_${LANGUAGE}_en.json \
     --save-interval-updates 1000 \
     --keep-interval-updates 10 \
     --no-epoch-checkpoints \
@@ -94,3 +97,5 @@ fairseq-train \
     --distributed-world-size 4 \
     --distributed-num-procs 4 \
     --update-freq 8
+
+echo "$TYPE is done!"
