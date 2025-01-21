@@ -4,10 +4,12 @@ pip install -r requirements.txt
 
 export CUDA_VISIBLE_DEVICES=0,1,2,3
 
+LANGUAGE="sl"
+
 # Define paths
-BPE_CODES="/netscratch/dgurgurov/projects2024/mt_lrls/parallel_data_mt/en-mt/codes.bpe"
-INPUT="/netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/paracrawl"
-OUTPUT="/netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/mt-rec"
+BPE_CODES="/netscratch/dgurgurov/projects2024/mt_lrls/parallel_data_mt/en-$LANGUAGE/codes.bpe"
+INPUT="/netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/paracrawl_$LANGUAGE"
+OUTPUT="/netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/$LANGUAGE-rec"
 SEED=42 
 
 # Create output directory
@@ -17,9 +19,9 @@ mkdir -p $OUTPUT
 SYNTHETIC_TRANS="$INPUT/gen.detok.out"
 REFERENCE_TRANS="$INPUT/gen.ref.detok"
 TRAIN_SYNTH="$OUTPUT/train.detok.en"
-TRAIN_REF="$OUTPUT/train.detok.mt"
+TRAIN_REF="$OUTPUT/train.detok.$LANGUAGE"
 VALID_SYNTH="$OUTPUT/valid.detok.en"
-VALID_REF="$OUTPUT/valid.detok.mt"
+VALID_REF="$OUTPUT/valid.detok.$LANGUAGE"
 
 
 # Combine the data into a single file
@@ -65,22 +67,22 @@ echo "Validation split created with 2000 lines. Remaining data used for training
 # Apply BPE to splits
 echo "Applying BPE tokenization..."
 subword-nmt apply-bpe -c $BPE_CODES < $OUTPUT/train.detok.en > $OUTPUT/train.bpe.en
-subword-nmt apply-bpe -c $BPE_CODES < $OUTPUT/train.detok.mt > $OUTPUT/train.bpe.mt
+subword-nmt apply-bpe -c $BPE_CODES < $OUTPUT/train.detok.$LANGUAGE > $OUTPUT/train.bpe.$LANGUAGE
 subword-nmt apply-bpe -c $BPE_CODES < $OUTPUT/valid.detok.en > $OUTPUT/valid.bpe.en
-subword-nmt apply-bpe -c $BPE_CODES < $OUTPUT/valid.detok.mt > $OUTPUT/valid.bpe.mt
+subword-nmt apply-bpe -c $BPE_CODES < $OUTPUT/valid.detok.$LANGUAGE > $OUTPUT/valid.bpe.$LANGUAGE
 
 # Preprocess the data
 fairseq-preprocess \
-    --source-lang en --target-lang mt \
+    --source-lang en --target-lang $LANGUAGE \
     --trainpref $OUTPUT/train.bpe \
     --validpref $OUTPUT/valid.bpe \
-    --destdir data-bin/mt-rec \
-    --srcdict /netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/en-mt/dict.en.txt \
-    --tgtdict /netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/en-mt/dict.mt.txt \
+    --destdir data-bin/$LANGUAGE-rec \
+    --srcdict /netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/en-$LANGUAGE/dict.en.txt \
+    --tgtdict /netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/en-$LANGUAGE/dict.$LANGUAGE.txt \
     --workers 20
 
 # Train the model
-fairseq-train data-bin/mt-rec \
+fairseq-train data-bin/$LANGUAGE-rec \
     --fp16 \
     --arch transformer \
     --share-decoder-input-output-embed \
@@ -112,10 +114,10 @@ fairseq-train data-bin/mt-rec \
     --eval-bleu-remove-bpe \
     --best-checkpoint-metric bleu \
     --maximize-best-checkpoint-metric \
-    --save-dir checkpoints/transformer_mt_mt \
+    --save-dir checkpoints/transformer_${LANGUAGE}_${LANGUAGE} \
     --log-format json \
     --log-interval 100 \
-    --log-file checkpoints/transformer_mt_mt/log_mt_mt.json \
+    --log-file checkpoints/transformer_${LANGUAGE}_${LANGUAGE}/log_${LANGUAGE}_${LANGUAGE}.json \
     --save-interval-updates 1000 \
     --keep-interval-updates 10 \
     --no-epoch-checkpoints \
