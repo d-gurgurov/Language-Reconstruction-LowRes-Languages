@@ -2,12 +2,14 @@
 
 pip install -r requirements.txt
 
+LANGUAGE="lv"
+
 fairseq-preprocess \
-    --source-lang mt --target-lang en \
-    --trainpref /netscratch/dgurgurov/projects2024/mt_lrls/parallel_data_mt/en-mt/opus.en-mt-train.bpe \
-    --validpref /netscratch/dgurgurov/projects2024/mt_lrls/parallel_data_mt/en-mt/opus.en-mt-dev.bpe \
-    --testpref /netscratch/dgurgurov/projects2024/mt_lrls/parallel_data_mt/en-mt/opus.en-mt-test.bpe \
-    --destdir /netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/mt-en \
+    --source-lang $LANGUAGE --target-lang en \
+    --trainpref /netscratch/dgurgurov/projects2024/mt_lrls/parallel_data_mt/en-$LANGUAGE/opus.en-$LANGUAGE-train.bpe \
+    --validpref /netscratch/dgurgurov/projects2024/mt_lrls/parallel_data_mt/en-$LANGUAGE/opus.en-$LANGUAGE-dev.bpe \
+    --testpref /netscratch/dgurgurov/projects2024/mt_lrls/parallel_data_mt/en-$LANGUAGE/opus.en-$LANGUAGE-test.bpe \
+    --destdir /netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/$LANGUAGE-en \
     --joined-dictionary \
     --workers 20
 
@@ -15,7 +17,7 @@ export CUDA_VISIBLE_DEVICES=0,1,2,3
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 
 fairseq-train \
-    /netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/mt-en \
+    /netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/$LANGUAGE-en \
     --fp16 \
     --arch transformer \
     --share-decoder-input-output-embed \
@@ -47,10 +49,10 @@ fairseq-train \
     --decoder-embed-dim 512 \
     --decoder-ffn-embed-dim 2048 \
     --decoder-attention-heads 8 \
-    --save-dir checkpoints/transformer_mt_en \
+    --save-dir checkpoints/transformer_${LANGUAGE}_en \
     --log-format json \
     --log-interval 100 \
-    --log-file checkpoints/transformer_mt_en/log_mt_en.json \
+    --log-file checkpoints/transformer_${LANGUAGE}_en/log_${LANGUAGE}_en.json \
     --save-interval-updates 1000 \
     --keep-interval-updates 10 \
     --no-epoch-checkpoints \

@@ -3,18 +3,20 @@
 pip install -r requirements.txt
 
 export CUDA_VISIBLE_DEVICES=0,1,2,3
-export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+# export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+
+LANGUAGE="lv"
 
 fairseq-preprocess \
-    --source-lang en --target-lang mt \
-    --trainpref /netscratch/dgurgurov/projects2024/mt_lrls/parallel_data_mt/en-mt/opus.en-mt-train.bpe \
-    --validpref /netscratch/dgurgurov/projects2024/mt_lrls/parallel_data_mt/en-mt/opus.en-mt-dev.bpe \
-    --testpref /netscratch/dgurgurov/projects2024/mt_lrls/parallel_data_mt/en-mt/opus.en-mt-test.bpe \
-    --destdir /netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/en-mt \
+    --source-lang en --target-lang $LANGUAGE \
+    --trainpref /netscratch/dgurgurov/projects2024/mt_lrls/parallel_data_mt/en-$LANGUAGE/opus.en-$LANGUAGE-train.bpe \
+    --validpref /netscratch/dgurgurov/projects2024/mt_lrls/parallel_data_mt/en-$LANGUAGE/opus.en-$LANGUAGE-dev.bpe \
+    --testpref /netscratch/dgurgurov/projects2024/mt_lrls/parallel_data_mt/en-$LANGUAGE/opus.en-$LANGUAGE-test.bpe \
+    --destdir /netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/en-$LANGUAGE \
     --joined-dictionary \
     --workers 20
 
-fairseq-train /netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/en-mt \
+fairseq-train /netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/en-$LANGUAGE \
     --fp16 \
     --arch transformer \
     --share-decoder-input-output-embed \
@@ -46,10 +48,10 @@ fairseq-train /netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/en-mt \
     --decoder-embed-dim 512 \
     --decoder-ffn-embed-dim 2048 \
     --decoder-attention-heads 8 \
-    --save-dir checkpoints/transformer_en_mt \
+    --save-dir checkpoints/transformer_en_$LANGUAGE \
     --log-format json \
     --log-interval 100 \
-    --log-file checkpoints/transformer_en_mt/log_en_mt.json \
+    --log-file checkpoints/transformer_en_$LANGUAGE/log_en_$LANGUAGE.json \
     --save-interval-updates 1000 \
     --keep-interval-updates 10 \
     --no-epoch-checkpoints \
