@@ -1,5 +1,5 @@
+torch==2.5.1
 fairseq
-torch
 subword-nmt
 sacrebleu
 sacremoses
