@@ -33,27 +33,27 @@ if [ ! -f "$OUTPUT_DIR/ParaCrawl.en-mt.en" ] || [ ! -f "$OUTPUT_DIR/ParaCrawl.en
 fi
 
 # Shuffle and split data
-echo "Shuffling and splitting data..."
-paste "$OUTPUT_DIR/ParaCrawl.en-mt.en" "$OUTPUT_DIR/ParaCrawl.en-mt.mt" | shuf --random-source=<(yes $SHUF_SEED) > "$OUTPUT_DIR/shuffled.txt"
+# echo "Shuffling and splitting data..."
+# paste "$OUTPUT_DIR/ParaCrawl.en-mt.en" "$OUTPUT_DIR/ParaCrawl.en-mt.mt" | shuf --random-source=<(yes $SHUF_SEED) > "$OUTPUT_DIR/shuffled.txt"
 
-TOTAL_LINES=$(wc -l < "$OUTPUT_DIR/shuffled.txt")
-TRAIN_LINES=$(( TOTAL_LINES * ${SPLIT_RATIO[0]} / 100 ))
-DEV_LINES=$(( TOTAL_LINES * ${SPLIT_RATIO[1]} / 100 ))
-TEST_LINES=$(( TOTAL_LINES - TRAIN_LINES - DEV_LINES ))
+# TOTAL_LINES=$(wc -l < "$OUTPUT_DIR/shuffled.txt")
+# TRAIN_LINES=$(( TOTAL_LINES * ${SPLIT_RATIO[0]} / 100 ))
+# DEV_LINES=$(( TOTAL_LINES * ${SPLIT_RATIO[1]} / 100 ))
+# TEST_LINES=$(( TOTAL_LINES - TRAIN_LINES - DEV_LINES ))
 
-head -n "$TRAIN_LINES" "$OUTPUT_DIR/shuffled.txt" | cut -f1 > "$OUTPUT_DIR/train.en"
-head -n "$TRAIN_LINES" "$OUTPUT_DIR/shuffled.txt" | cut -f2 > "$OUTPUT_DIR/train.mt"
+# head -n "$TRAIN_LINES" "$OUTPUT_DIR/shuffled.txt" | cut -f1 > "$OUTPUT_DIR/train.en"
+# head -n "$TRAIN_LINES" "$OUTPUT_DIR/shuffled.txt" | cut -f2 > "$OUTPUT_DIR/train.mt"
 
-tail -n +$(( TRAIN_LINES + 1 )) "$OUTPUT_DIR/shuffled.txt" | head -n "$DEV_LINES" | cut -f1 > "$OUTPUT_DIR/dev.en"
-tail -n +$(( TRAIN_LINES + 1 )) "$OUTPUT_DIR/shuffled.txt" | head -n "$DEV_LINES" | cut -f2 > "$OUTPUT_DIR/dev.mt"
+# tail -n +$(( TRAIN_LINES + 1 )) "$OUTPUT_DIR/shuffled.txt" | head -n "$DEV_LINES" | cut -f1 > "$OUTPUT_DIR/dev.en"
+# tail -n +$(( TRAIN_LINES + 1 )) "$OUTPUT_DIR/shuffled.txt" | head -n "$DEV_LINES" | cut -f2 > "$OUTPUT_DIR/dev.mt"
 
-tail -n "$TEST_LINES" "$OUTPUT_DIR/shuffled.txt" | cut -f1 > "$OUTPUT_DIR/test.en"
-tail -n "$TEST_LINES" "$OUTPUT_DIR/shuffled.txt" | cut -f2 > "$OUTPUT_DIR/test.mt"
+# tail -n "$TEST_LINES" "$OUTPUT_DIR/shuffled.txt" | cut -f1 > "$OUTPUT_DIR/test.en"
+# tail -n "$TEST_LINES" "$OUTPUT_DIR/shuffled.txt" | cut -f2 > "$OUTPUT_DIR/test.mt"
 
-# Cleanup
-rm "$OUTPUT_DIR/shuffled.txt"
+# # Cleanup
+# rm "$OUTPUT_DIR/shuffled.txt"
 
-echo "Data preparation complete. Files saved in $OUTPUT_DIR:"  
-echo "- train.en / train.mt"
-echo "- dev.en / dev.mt"
-echo "- test.en / test.mt"
+# echo "Data preparation complete. Files saved in $OUTPUT_DIR:"  
+# echo "- train.en / train.mt"
+# echo "- dev.en / dev.mt"
+# echo "- test.en / test.mt"
