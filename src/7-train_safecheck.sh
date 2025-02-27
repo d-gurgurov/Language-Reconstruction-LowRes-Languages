@@ -50,8 +50,7 @@ fairseq-preprocess \
     --tgtdict /netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/en-$LANGUAGE/dict.$LANGUAGE.txt \
     --workers 20
 
-export CUDA_VISIBLE_DEVICES=0,1,2,3
-export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+mkdir -p checkpoints/transformer_${LANGUAGE}_en_safecheck_$TYPE
 
 fairseq-train \
     $OUT_DIR \
