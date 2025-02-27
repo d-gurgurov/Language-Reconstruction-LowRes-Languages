@@ -2,8 +2,6 @@
 
 pip install -r requirements.txt
 
-export CUDA_VISIBLE_DEVICES=0,1,2,3
-
 LANGUAGE="sl"
 
 # Define paths
@@ -81,7 +79,7 @@ fairseq-preprocess \
     --tgtdict /netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/en-$LANGUAGE/dict.$LANGUAGE.txt \
     --workers 20
 
-# Train the model
+# Train the model - using a big learning rate here 
 fairseq-train data-bin/$LANGUAGE-rec \
     --fp16 \
     --arch transformer \
