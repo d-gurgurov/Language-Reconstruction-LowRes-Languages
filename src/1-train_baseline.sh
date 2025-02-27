@@ -16,6 +16,8 @@ fairseq-preprocess \
 export CUDA_VISIBLE_DEVICES=0,1,2,3
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 
+mkdir -p checkpoints/transformer_${LANGUAGE}_en
+
 fairseq-train \
     /netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/$LANGUAGE-en \
     --fp16 \
