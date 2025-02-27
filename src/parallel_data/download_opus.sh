@@ -33,7 +33,7 @@ wget https://data.statmt.org/opus-100-corpus/v1.0/supervised/en-ug/opus.en-ug-te
 wget https://data.statmt.org/opus-100-corpus/v1.0/supervised/en-ug/opus.en-ug-train.ug
 cd ..
 
-# Unzip files if they are compressed (uncomment if needed)
+# Unzip file
 # cd en-mt && unzip '*.zip' && cd ..
 # cd en-si && unzip '*.zip' && cd ..
 # cd en-ug && unzip '*.zip' && cd ..
