@@ -2,9 +2,6 @@
 
 pip install -r requirements.txt
 
-export CUDA_VISIBLE_DEVICES=0,1,2,3
-# export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
-
 LANGUAGE="lv"
 
 fairseq-preprocess \
@@ -15,6 +12,8 @@ fairseq-preprocess \
     --destdir /netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/en-$LANGUAGE \
     --joined-dictionary \
     --workers 20
+
+mkdir -p checkpoints/transformer_en_$LANGUAGE
 
 fairseq-train /netscratch/dgurgurov/projects2024/mt_lrls/src/data-bin/en-$LANGUAGE \
     --fp16 \
