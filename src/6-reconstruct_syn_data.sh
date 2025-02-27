@@ -46,7 +46,7 @@ fairseq-generate $OUTPUT \
     --beam 4 \
     --gen-subset train \
     --lenpen 0.6 \
-    --batch-size 1 \
+    --batch-size 128 \
     --sacrebleu \
     --remove-bpe \
     --max-len-a 1.2 \
